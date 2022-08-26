@@ -4,8 +4,10 @@ const app = express()
 var cors = require('cors')
 const os = require('os')
 import registration  from './modules/registration'
+import login  from './modules/login'
 
-app.use('/registration', registration)
+app.use('/api/registration', registration)
+app.use('/api/login', login)
 
 
 app.listen(process.env.SERVER_PORT, () => {
