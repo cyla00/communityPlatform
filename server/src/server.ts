@@ -2,9 +2,13 @@ require('dotenv').config()
 const express = require('express')
 const app = express()
 var cors = require('cors')
+const { MongoClient } = require('mongodb')
 const os = require('os')
 import registration  from './modules/registration'
 import login  from './modules/login'
+import { run } from './modules/database'
+
+run()
 
 app.use('/api/registration', registration)
 app.use('/api/login', login)
