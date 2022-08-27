@@ -9,22 +9,32 @@ import {default as db_json} from './db_config.json'
 
 const database_collections:string[] = db_json.db_collection_list
 
-export async function run(){
+export function openDbConnection(){
     try{
-        await client.connect((err:any, db:any) => {
+        return new MongoClient(url)
+    }
+    catch(err){
+        console.error(err)
+    }
+}
+
+
+export async function buildDb(){
+    try{
+        await client.connect(async (err:any, db:any) => {
             if(err) return console.log(err)
 
             const myDB = db.db(process.env.MONGO_DATABASE)
 
-            database_collections.forEach((collection_name:string) => {
-                myDB.listCollections({name: collection_name}).next((err:any, info:any) => {
-                    if(info) return console.log(`${collection_name} exists`)
-                    myDB.createCollection(collection_name)
-                    console.log(`${collection_name} created`)
+            for (let i = 0; i < database_collections.length; i++) {
+                await myDB.listCollections({ name: database_collections[i] }).next(async (err: any, info: any) => {
+                    if (info) return console.log(`${database_collections[i]} exists`)
+                    await myDB.createCollection(database_collections[i])
+                    console.log(`${database_collections[i]} created`)
+                    await client.close().then(console.log('closed'))
                 })
-            })
+            }
         })
-        console.log('database ok')
     }catch(err){
         console.log(err)
     }

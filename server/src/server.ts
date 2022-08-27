@@ -4,14 +4,19 @@ const app = express()
 var cors = require('cors')
 const { MongoClient } = require('mongodb')
 const os = require('os')
+const bodyParser = require('body-parser')
 import registration  from './modules/registration'
 import login  from './modules/login'
-import { run } from './modules/database'
+import { buildDb } from './modules/database'
 
-run()
+buildDb()
 
+app.use(cors())
+app.use(express.json())
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api/registration', registration)
 app.use('/api/login', login)
+
 
 
 app.listen(process.env.SERVER_PORT, () => {
