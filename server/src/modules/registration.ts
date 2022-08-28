@@ -2,6 +2,7 @@ const express = require('express')
 const nodemailer = require("nodemailer")
 const router = express.Router()
 const { v4: uuidv4 } = require('uuid')
+const SHA256 = require("crypto-js/sha256")
 
 import { openDbConnection } from './database'
 
@@ -13,6 +14,8 @@ router.post('/', (req:any,res:any) => {
         id: String,
         email: String,
         username: String,
+        avatar: String,
+        profile_banner: String,
         password: String,
         birth_date: String,
         user_description: String,
@@ -44,17 +47,19 @@ router.post('/', (req:any,res:any) => {
         const myDB = db.db(process.env.MONGO_DATABASE)
 
         await myDB.collection('users').findOne({"email":req.body.email}).then(async (document:any) => {
-            if(document) return res.sendStatus(409)
+            if(document) return res.sendStatus(500)
             await myDB.collection('users').findOne({"username":req.body.username}).then(async (document:any) => {
-                if(document) return res.sendStatus(409)
+                if(document) return res.sendStatus(500)
 
                 let date = new Date()
 
                 let user_object :user_data = {
                     id: uuidv4(),
-                    email: req.body.email, 
+                    email: SHA256(req.body.email).toString(), 
                     username: req.body.username,
-                    password: req.body.password,
+                    avatar: './avatars/default_avatar.png',
+                    profile_banner: './banners/default_banner.png',
+                    password: SHA256(req.body.password).toString(),
                     birth_date: req.body.birth_date,
                     user_description: '',
                     address: '',
@@ -74,7 +79,7 @@ router.post('/', (req:any,res:any) => {
                     profile_authority: 'default',
                     user_video_clips: [],
                     status: 'pending',
-                    registration_date: `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`,
+                    registration_date: `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
                     last_login_date: '0',
                 }
         
@@ -98,7 +103,7 @@ router.post('/', (req:any,res:any) => {
 
                     //send verification email here 
 
-                await myDB.collection('users').findOne({"email":req.body.email}).then((document:any) => {
+                await myDB.collection('users').findOne({"email": SHA256(req.body.email).toString()}).then((document:any) => {
                     async function mailer(){
                         var transporter = nodemailer.createTransport({
                             service: 'Mail.ru',
@@ -122,7 +127,7 @@ router.post('/', (req:any,res:any) => {
                     mailer().catch((err:any) => {
                         if(err) {
                             console.log(err)
-                            return res.sendStatus(404)
+                            return res.sendStatus(500)
                         }
                     })
                     db.close()

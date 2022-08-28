@@ -2,7 +2,6 @@ const express = require('express')
 const router = express.Router()
 import { openDbConnection } from './database'
 const path = require('path')
-var ObjectID = require('mongodb').ObjectID
 
 const client = openDbConnection()
 
