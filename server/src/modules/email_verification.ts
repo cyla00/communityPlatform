@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 import { openDbConnection } from './database'
+const path = require('path')
 var ObjectID = require('mongodb').ObjectID
 
 const client = openDbConnection()
@@ -16,9 +17,9 @@ router.get('/:id', async (req:any,res:any) => {
         let newvalues = {$set: {status: "active"}}
 
         await myDB.collection('users').updateOne(myquery, newvalues, {}).then((document:any) => {   
-            if(document.modifiedCount === 0) return res.status(403).send('An error occurred, please retry later')
+            if(document.modifiedCount === 0) return res.status(403).sendFile(path.join(__dirname, '../pages/email_error.html'))
             db.close()
-            res.status(200).send('confirmed')
+            res.status(200).sendFile(path.join(__dirname, '../pages/email_verification.html'))
         })
     })
 })
