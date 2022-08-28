@@ -5,6 +5,7 @@ MONGO_PASSWORD=''<br>
 MONGO_DATABASE=''<br>
 MONGO_HOST=''<br>
 MONGO_PORT=27017<br>
+WEBSITE_HOST='http://localhost:3000/'<br>
 
 ### step 1:<br>
 download mongodb.<br>

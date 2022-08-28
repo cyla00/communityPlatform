@@ -3,7 +3,6 @@ const { MongoClient } = require('mongodb')
 
 const url = `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/?authSource=${process.env.MONGO_DATABASE}`
 
-const client = new MongoClient(url)
 
 import {default as db_json} from './db_config.json'
 
@@ -20,9 +19,10 @@ export function openDbConnection(){
 
 
 export async function buildDb(){
+    const client = new MongoClient(url)
     try{
         await client.connect(async (err:any, db:any) => {
-            if(err) return console.log(err)
+            if(err) throw err
 
             const myDB = db.db(process.env.MONGO_DATABASE)
 
@@ -31,7 +31,6 @@ export async function buildDb(){
                     if (info) return console.log(`${database_collections[i]} exists`)
                     await myDB.createCollection(database_collections[i])
                     console.log(`${database_collections[i]} created`)
-                    await client.close().then(console.log('closed'))
                 })
             }
         })
@@ -39,3 +38,4 @@ export async function buildDb(){
         console.log(err)
     }
 }
+
