@@ -1,4 +1,5 @@
 const express = require('express')
+const nodemailer = require("nodemailer")
 const router = express.Router()
 const { v4: uuidv4 } = require('uuid')
 
@@ -9,6 +10,7 @@ const client = openDbConnection()
 router.post('/', (req:any,res:any) => {
     
     interface user_data {
+        id: String,
         email: String,
         username: String,
         password: String,
@@ -36,74 +38,99 @@ router.post('/', (req:any,res:any) => {
     }
 
 
-    try{
-        client.connect(async (err:any, db:any) => {
-            if(err) throw err
+    client.connect(async (err:any, db:any) => {
+        if(err) throw err
 
-            const myDB = db.db(process.env.MONGO_DATABASE)
+        const myDB = db.db(process.env.MONGO_DATABASE)
 
-            myDB.collection('users').findOne({"email":req.body.email}).then((document:any) => {
+        await myDB.collection('users').findOne({"email":req.body.email}).then(async (document:any) => {
+            if(document) return res.sendStatus(409)
+            await myDB.collection('users').findOne({"username":req.body.username}).then(async (document:any) => {
                 if(document) return res.sendStatus(409)
-                myDB.collection('users').findOne({"username":req.body.username}).then((document:any) => {
-                    if(document) return res.sendStatus(409)
 
-                    let date = new Date()
+                let date = new Date()
 
-                    let user_object :user_data = {
-                        email: req.body.email, 
-                        username: req.body.username,
-                        password: req.body.password,
-                        birth_date: req.body.birth_date,
-                        user_description: '',
-                        address: '',
-                        zip_code: '',
-                        city: '',
-                        country: req.body.country,
-                        security_code: uuidv4(),
-                        steam_profile_link: '',
-                        discord_username: '',
-                        twitch_link: '',
-                        youtube_link: '',
-                        user_games: [],
-                        user_rank: 1,
-                        user_token_balance: 10,
-                        user_referral_link: '',
-                        user_referral_count: [],
-                        profile_authority: 'default',
-                        user_video_clips: [],
-                        status: 'pending',
-                        registration_date: `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`,
-                        last_login_date: '0',
-                    }
+                let user_object :user_data = {
+                    id: uuidv4(),
+                    email: req.body.email, 
+                    username: req.body.username,
+                    password: req.body.password,
+                    birth_date: req.body.birth_date,
+                    user_description: '',
+                    address: '',
+                    zip_code: '',
+                    city: '',
+                    country: req.body.country,
+                    security_code: uuidv4(),
+                    steam_profile_link: '',
+                    discord_username: '',
+                    twitch_link: '',
+                    youtube_link: '',
+                    user_games: [],
+                    user_rank: 1,
+                    user_token_balance: 10,
+                    user_referral_link: '',
+                    user_referral_count: [],
+                    profile_authority: 'default',
+                    user_video_clips: [],
+                    status: 'pending',
+                    registration_date: `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`,
+                    last_login_date: '0',
+                }
         
-                    myDB.collection('users').insertOne(user_object, (err:any, res:any) => {
-                        if (err) throw err
-                    })
+                await myDB.collection('users').insertOne(user_object, (err:any, res:any) => {
+                    if (err) throw err
+                })
     
-                    interface view_method {
-                        type: Number,
-                        method: String,
-                    }
+                interface view_method {
+                    type: Number,
+                    method: String,
+                }
     
-                    const how_you_found_us :view_method = {
-                        type: 1,
-                        method: req.body.how_found_us
-                    }
+                const how_you_found_us :view_method = {
+                    type: 1,
+                    method: req.body.how_found_us
+                }
     
-                    myDB.collection('platform_view_method').insertOne(how_you_found_us, (err:any, res:any) => {
-                        if(err) throw err
-                        db.close()
-                    })
+                await myDB.collection('platform_view_method').insertOne(how_you_found_us, (err:any, res:any) => {
+                    if(err) throw err
+                })
 
                     //send verification email here 
 
+                await myDB.collection('users').findOne({"email":req.body.email}).then((document:any) => {
+                    async function mailer(){
+                        var transporter = nodemailer.createTransport({
+                            service: 'Mail.ru',
+                            secure: true,
+                            auth: {
+                                user: process.env.MAIL, 
+                                pass: process.env.MAIL_PASS,
+                            }, 
+                        })
+                    
+                        await transporter.sendMail({
+                        from: process.env.MAIL,
+                        to: req.body.email,
+                        subject: `${process.env.PLATFORM_NAME} e-mail verification`,
+                        html: `
+                            <h1 style="">Please verify you account before login</h1>
+                            <a style="margin:auto; color:blue;" href='${process.env.WEBSITE_HOST}api/verify_email/${document.id}'>Verify your account</a>
+                        `,
+                        })
+                    }
+                    mailer().catch((err:any) => {
+                        if(err) {
+                            console.log(err)
+                            return res.sendStatus(404)
+                        }
+                    })
+                    db.close()
                     res.sendStatus(201)
                 })
             })
         })
-    }catch(err){
-        console.log(err)
-    }
+    })
 })
 
 export default router

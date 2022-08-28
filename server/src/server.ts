@@ -16,7 +16,7 @@ app.use(cors())
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use('/api/registration', registration)
-app.use('/api/verify_email/:id', email_verification)
+app.use('/api/verify_email', email_verification)
 app.use('/api/login', login)
 
 

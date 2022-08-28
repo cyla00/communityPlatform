@@ -22,3 +22,7 @@ create 'dbOwner' user on 'use_database'.<br>
 ### step 5:<br>
 enable mongodb Auth from config file.<br>
 
+
+### platform production setup<br>
+
+set environment variables correctly, url included<br>
