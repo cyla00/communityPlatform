@@ -29,7 +29,7 @@ router.post('/', async (req:any,res:any) => {
                 const token = jwt.sign({
                     id: user.id,
                     username: user.username,
-                    email: user.email,
+                    email: email,
                     country: user.country,
                     user_rank: user.user_rank,
                     authority: user.profile_authority,
@@ -37,9 +37,9 @@ router.post('/', async (req:any,res:any) => {
                     avatar: user.avatar,
                     profile_banner: user.profile_banner,
                     last_login: user.last_login_date,
-                }, process.env.SECRET_KEY, {expiresIn: '6 hours'})
+                }, process.env.SECRET_KEY, {expiresIn: '3 hours'})
 
-                return res.status(200).json({ access_token: token })
+                return res.status(200).json({ access_token: `${token}` })
             })
         })
     })

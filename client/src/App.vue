@@ -1,30 +1,42 @@
+<script>
+import 'boxicons/css/boxicons.min.css'
+
+export default{
+  name: 'App',
+}
+</script>
+
+
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
   <router-view/>
 </template>
 
 <style>
+:root{
+  --background: #262B2F;
+  --nav-background: #222323;
+  --text-light: #d9d9d9;
+  --blue-background: #110B19;
+}
+
+body{
+  margin: 0;
+  padding: 0;
+  background: #060304;
+}
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: Poppins;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: var(--text-light);
 }
 
-nav {
-  padding: 30px;
-}
-
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
+button {
+  cursor: pointer;
+  appearance: none;
+  border: none;
+  outline: none;
+  background: none;
 }
 </style>
