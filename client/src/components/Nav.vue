@@ -30,7 +30,7 @@ export default{
         </h1>
         <div id="sidebar-links-wrapper">
             <SidebarLink to="/dashboard" icon="bx bxs-dashboard bx-md">Dashboard</SidebarLink>
-            <SidebarLink to="/profile/{{'wdwd'}}" icon="bx bx-user bx-md">User</SidebarLink>
+            <SidebarLink to="/profile/{{user_id}}" icon="bx bx-user bx-md">User</SidebarLink>
             <SidebarLink to="/games" icon="bx bx-play-circle bx-md">Games</SidebarLink>
             <SidebarLink to="/bank" icon="bx bxs-bank bx-md">Bank</SidebarLink>
             <SidebarLink to="/shop" icon="bx bx-store-alt bx-md">Shop</SidebarLink>
