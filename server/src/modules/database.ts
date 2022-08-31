@@ -3,7 +3,6 @@ const { MongoClient } = require('mongodb')
 
 const url = `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/?authSource=${process.env.MONGO_DATABASE}`
 
-
 import {default as db_json} from './db_config.json'
 
 const database_collections:string[] = db_json.db_collection_list

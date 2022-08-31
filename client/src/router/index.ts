@@ -7,6 +7,10 @@ import Profile from '@/views/Profile.vue'
 import Games from '@/views/Games.vue'
 import Bank from '@/views/Bank.vue'
 import Shop from '@/views/Shop.vue'
+import SalesTerms from '@/views/SalesTerms.vue'
+import PrivacyPolicy from '@/views/PrivacyPolicy.vue'
+import ContactUs from '@/views/ContactUs.vue'
+import FAQ from '@/views/FAQ.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -48,6 +52,26 @@ const routes: Array<RouteRecordRaw> = [
     path: '/shop',
     name: 'Shop',
     component: Shop
+  },
+  {
+    path: '/terms-condition-sale',
+    name: 'SalesTerms',
+    component: SalesTerms
+  },
+  {
+    path: '/privacy-policy',
+    name: 'PrivacyPolicy',
+    component: PrivacyPolicy
+  },
+  {
+    path: '/contact-us',
+    name: 'ContactUs',
+    component: ContactUs
+  },
+  {
+    path: '/frequent-asked-questions',
+    name: 'FAQ',
+    component: FAQ
   },
 ]
 
