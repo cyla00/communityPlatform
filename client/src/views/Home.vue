@@ -27,6 +27,9 @@ export default{
 <template>
     <div>
       <header :class="{change_color: scrollPosition > 50}">
+        <div id="logo-wrapper-res">
+          <a href="/"><img src="https://i.ibb.co/vvSbVyY/icon.png" alt=""></a>
+        </div>
         <div id="logo-wrapper">
           <a href="/"><img src="https://i.ibb.co/L5qBmym/avatar-removebg-preview.png" alt=""></a>
         </div>
@@ -74,6 +77,10 @@ export default{
 </template>
 
 <style scoped>
+
+#logo-wrapper-res{
+  display: none;
+}
 
 header{
   position: fixed;
@@ -203,6 +210,29 @@ ul{
 
 @media only screen and (max-width: 960px){
 
+  #page-1-text{
+    margin-top: 1em !important;
+    font-size: 1em !important;
+  }
+
+  header{
+    position: relative;
+    display: block;
+    padding: 0 !important;
+  }
+  #logo-wrapper{
+    display: none;
+  }
+  #logo-wrapper-res{
+    width: 50%;
+    display: block;
+    margin: auto !important;
+    padding-top: 2em;
+  }
+  #logo-wrapper-res img{
+    width: 50%;
+  }
+
   header ul{
     display: none;
   }
@@ -214,13 +244,21 @@ ul{
     justify-content: center;
   }
 
+  #content-3{
+    background-image: url('../../public/bg8-res.jpg');
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+  }
+
+
   #page-1-text{
     margin: auto;
     height: 20em;
     padding: 0 !important;
     text-align: center;
     padding: 2em !important;
-    font-size: 13px;
+    font-size: 1.2em;
   }
 
   #discover-link-wrapper{
