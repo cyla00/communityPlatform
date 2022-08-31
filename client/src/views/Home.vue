@@ -68,8 +68,8 @@ export default{
         <div class="content-wrapper" id="content-3">
             <div id="page-3-text"> 
               <h1>What are you waiting for?</h1>
-              <p>Don't miss out on the opportunity to make gaming<br>
-                 the best experience you can make it.<br>
+              <p>Don't miss out on the opportunity to transform gaming<br>
+                 into the best experience you can make it.<br>
               </p>
               <div class="discover-link-wrapper">
                 <a class="discover-link" href="/registration"><i class='bx bxs-rocket bx-ms'></i>get started</a>

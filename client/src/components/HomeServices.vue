@@ -211,6 +211,14 @@ img{
   width: 80px;
   margin: auto;
 }
+#more-games{
+  background: linear-gradient(to bottom left, #ff00ff, #0B4ECC);
+  margin: 0;
+  padding: 0.5em;
+  color: #ffffff;
+  text-decoration: underline;
+  text-transform: uppercase;
+}
 
 @media only screen and (max-width: 1280px){
   
