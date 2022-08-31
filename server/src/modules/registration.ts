@@ -23,6 +23,7 @@ router.post('/', (req:any,res:any) => {
         zip_code: String,
         city: String,
         country: String,
+        country_flag: String,
         security_code: String,
         steam_profile_link: String,
         discord_username: String,
@@ -46,10 +47,22 @@ router.post('/', (req:any,res:any) => {
 
         const myDB = db.db(process.env.MONGO_DATABASE)
 
-        await myDB.collection('users').findOne({"email":req.body.email}).then(async (document:any) => {
-            if(document) return res.sendStatus(500)
+        const validateEmail = (email:string) => {
+            return String(email)
+              .toLowerCase()
+              .match(
+                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+              )
+          }
+
+          if(!validateEmail(req.body.email)) return res.status(401).send({error: 'email not valid'})
+
+        await myDB.collection('users').findOne({"email":SHA256(req.body.email).toString()}).then(async (document:any) => {
+            if(document) return res.status(401).send({error: 'email already exists'})
+            
+
             await myDB.collection('users').findOne({"username":req.body.username}).then(async (document:any) => {
-                if(document) return res.sendStatus(500)
+                if(document) return res.status(401).send({error: 'username already exists'})
 
                 let date = new Date()
 
@@ -66,6 +79,7 @@ router.post('/', (req:any,res:any) => {
                     zip_code: '',
                     city: '',
                     country: req.body.country,
+                    country_flag: req.body.country_flag,
                     security_code: uuidv4(),
                     steam_profile_link: '',
                     discord_username: '',
@@ -83,7 +97,7 @@ router.post('/', (req:any,res:any) => {
                     last_login_date: '0',
                 }
         
-                await myDB.collection('users').insertOne(user_object, (err:any, res:any) => {
+                await myDB.collection('users').insertOne(user_object, (err:any, doc:any) => {
                     if (err) throw err
                 })
     
@@ -97,13 +111,13 @@ router.post('/', (req:any,res:any) => {
                     method: req.body.how_found_us
                 }
     
-                await myDB.collection('platform_view_method').insertOne(how_you_found_us, (err:any, res:any) => {
+                await myDB.collection('platform_view_method').insertOne(how_you_found_us, (err:any, doc:any) => {
                     if(err) throw err
                 })
 
                     //send verification email here 
 
-                await myDB.collection('users').findOne({"email": SHA256(req.body.email).toString()}).then((document:any) => {
+                await myDB.collection('users').findOne({"email": SHA256(req.body.email).toString()}).then((doc:any) => {
                     async function mailer(){
                         var transporter = nodemailer.createTransport({
                             service: 'Mail.ru',
@@ -120,7 +134,7 @@ router.post('/', (req:any,res:any) => {
                         subject: `${process.env.PLATFORM_NAME} e-mail verification`,
                         html: `
                             <h1 style="">Please verify you account before login</h1>
-                            <a style="margin:auto; color:blue;" href='${process.env.WEBSITE_HOST}api/verify_email/${document.id}'>Verify your account</a>
+                            <a style="margin:auto; color:blue;" href='${process.env.WEBSITE_HOST}api/verify_email/${doc.id}'>Verify your account</a>
                         `,
                         })
                     }
@@ -130,8 +144,9 @@ router.post('/', (req:any,res:any) => {
                             return res.sendStatus(500)
                         }
                     })
+                    
                     db.close()
-                    res.sendStatus(201)
+                    res.status(201).send({security_key: user_object.security_code})
                 })
             })
         })
