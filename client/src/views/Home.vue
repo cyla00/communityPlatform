@@ -1,12 +1,14 @@
 <script>
 import Footer from '@/components/Footer.vue'
 import HomeServices from '@/components/HomeServices.vue'
+import Homelastsektor from '@/components/Homelastsektor.vue'
 
 export default{
   name: 'Home',
   components: {
     Footer,
     HomeServices,
+    Homelastsektor,
   },
   data(){
     return{
@@ -54,8 +56,8 @@ export default{
                  gaming servers and services that gives them the opportunity to create<br>
                  a unique gaming experience to share with the world.
               </p>
-              <div id="discover-link-wrapper">
-                <a id="discover-link" href="/registration">Discover us</a>
+              <div class="discover-link-wrapper">
+                <a class="discover-link" href="/registration"><i class='bx bxs-rocket bx-ms'></i>get started</a>
               </div>
             </div>
             <div></div>
@@ -64,12 +66,19 @@ export default{
         <HomeServices/>
 
         <div class="content-wrapper" id="content-3">
+            <div id="page-3-text"> 
+              <h1>What are you waiting for?</h1>
+              <p>Don't miss out on the opportunity to make gaming<br>
+                 the best experience you can make it.<br>
+              </p>
+              <div class="discover-link-wrapper">
+                <a class="discover-link" href="/registration"><i class='bx bxs-rocket bx-ms'></i>get started</a>
+              </div>
+            </div>
             
         </div>
 
-        <div class="content-wrapper" id="content-4">
-            
-        </div>
+        <Homelastsektor/>
 
 
         <Footer/>
@@ -77,6 +86,10 @@ export default{
 </template>
 
 <style scoped>
+
+.bxs-rocket{
+  margin: auto;
+}
 
 #logo-wrapper-res{
   display: none;
@@ -163,6 +176,23 @@ ul{
   display: grid;
   grid-template-columns: 1fr 30%;
 }
+#content-3{
+  text-align: center;
+  font-size: 20px;
+  color: #060304;
+  font-weight: bold;
+  display: flex;
+}
+#page-3-text{
+  width: 100%;
+  padding: 4em;
+  margin: auto;
+  background-color: rgba(0, 153, 153, 0.5);
+  -webkit-box-shadow: 0 0 20px 20px #060304;
+  -moz-box-shadow: 0 0 20px 20px #060304;
+  box-shadow: 0 0 20px 20px #060304;
+}
+
 #page-1-text{
   margin: auto;
   text-align: start;
@@ -171,7 +201,7 @@ ul{
 #page-1-text p{
   font-weight: bold;
 }
-#discover-link{
+.discover-link{
   justify-content: center;
   padding: 0.7em;
   border: solid 1px #ffffff;
@@ -183,7 +213,7 @@ ul{
   text-transform: uppercase;
   background: linear-gradient(to bottom left, #C9AE66, #FBF3A1);
 }
-#discover-link:hover{
+.discover-link:hover{
   background: linear-gradient(to bottom left, #4D2E86, #0B4ECC);
   transition: 0.1s;
   box-shadow: 0px 0px 10px 0px #F1DFF1;
@@ -191,7 +221,7 @@ ul{
 }
 
 #content-3{
-  background-image: url('../../public/bg8.jpg');
+  background-image: url('../../public/bg11.png');
   background-size: cover;
   background-repeat: no-repeat;
   -webkit-box-shadow: 0 0 90px 100px #060304 inset;
@@ -242,30 +272,42 @@ ul{
     background-size: cover;
     display: flex;
     justify-content: center;
+    -webkit-box-shadow: 0 0 30px 30px #060304 inset;
+    -moz-box-shadow: 0 0 30px 30px #060304 inset;
+    box-shadow: 0 0 30px 30px #060304 inset;
   }
 
   #content-3{
-    background-image: url('../../public/bg8-res.jpg');
+    background-image: url('../../public/bg11-res.png');
     background-size: cover;
     display: flex;
     justify-content: center;
+    -webkit-box-shadow: 0 0 30px 30px #060304 inset;
+    -moz-box-shadow: 0 0 30px 30px #060304 inset;
+    box-shadow: 0 0 30px 30px #060304 inset;
   }
 
 
   #page-1-text{
     margin: auto;
     height: 20em;
-    padding: 0 !important;
     text-align: center;
     padding: 2em !important;
     font-size: 1.2em;
   }
 
-  #discover-link-wrapper{
+  #page-3-text{
+    margin: auto;
+    text-align: center;
+    padding: 1em !important;
+    font-size: 1.2em;
+  }
+
+  .discover-link-wrapper{
     margin-top: 5em;
   }
 
-  #discover-link{
+  .discover-link{
     font-size: 30px;
     padding: 0.3em;
   }

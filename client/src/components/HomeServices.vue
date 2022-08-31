@@ -78,8 +78,46 @@ export default{
             with a bounch of people we enjoy to play with.
           </p>
         </div>
-
     </div>
+
+      <div id="games-wrapper">
+          <div class="game" id="minecraft">
+            <div class="game-logo-wrapper">
+              <img class="game-logo" src="../../public/minecraft-ico.png" alt="">
+            </div>
+          </div>
+
+          <div class="game" id="valorant">
+            <div class="game-logo-wrapper">
+              <img class="game-logo" src="../../public/valorant-ico.png" alt="">
+            </div>
+          </div>
+
+          <div class="game" id="apex">
+            <div class="game-logo-wrapper">
+              <img class="game-logo" src="../../public/apex-ico.png" alt="">
+            </div>
+          </div>
+
+          <div class="game" id="cod">
+            <div class="game-logo-wrapper">
+              <img class="game-logo" src="../../public/cod-ico.png" alt="">
+            </div>
+          </div>
+
+          <div class="game" id="gta">
+            <div class="game-logo-wrapper">
+              <img class="game-logo" src="../../public/gta-ico.png" alt="">
+            </div>
+          </div>
+
+          <div class="game" id="lol">
+            <div class="game-logo-wrapper">
+              <img class="game-logo" src="../../public/lol-ico.png" alt="">
+            </div>
+          </div>
+      </div>
+      <h3 id="more-games">And many more!</h3>
   </div>
     
 </template>
@@ -123,6 +161,56 @@ img{
   margin: 2em 0;
 }
 
+#games-wrapper{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  margin-top: 8%;
+}
+
+#minecraft{
+  background-image: url('../../public/minecraft-bg.jpg');
+  background-size: cover;
+}
+#valorant{
+  background-image: url('../../public/valorant-bg.jpg');
+  background-size: cover;
+}
+#apex{
+  background-image: url('../../public/apex-bg.jpg');
+  background-size: cover;
+}
+#cod{
+  background-image: url('../../public/cod-bg.jpg');
+  background-size: cover;
+}
+#gta{
+  background-image: url('../../public/gta-bg.jpg');
+  background-size: cover;
+}
+#lol{
+  background-image: url('../../public/lol-bg.jpg');
+  background-size: cover;
+}
+.game{
+  height: 15em;
+}
+.game-logo-wrapper{
+  height: 100%;
+  width: 100%;
+  background-color: rgba(153, 153, 153, 0.6);
+  display: flex;
+  justify-content: center;
+}
+
+.game-logo-wrapper:hover{
+  transition: 0.3s;
+  background: none;
+}
+
+.game-logo{
+  width: 80px;
+  margin: auto;
+}
 
 @media only screen and (max-width: 1280px){
   
@@ -148,6 +236,13 @@ img{
     display: grid;
     grid-template-columns: 1fr;
     padding: 0 1em;
+  }
+
+  #games-wrapper{
+    display: none;
+  }
+  #more-games{
+    display: none;
   }
 }
 </style>
