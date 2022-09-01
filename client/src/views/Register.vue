@@ -3,6 +3,7 @@ import Footer from '@/components/Footer.vue'
 import {default as country_list} from './country_list.json'
 const axios = require('axios').default
 
+
 export default{
   name: 'Login_page',
   components: {
@@ -32,9 +33,12 @@ export default{
         )
       }
 
+      
+
       if(this.username === '' || this.email === '' || this.password === '' || this.confirm_password === '' || this.birth_date === '' || this.country === '' || this.viewMethod === ''){
         return this.error_message = 'Please fill all required fields'
       }
+
       if(!validateEmail(this.email)) return this.error_message = 'Email not valid'
       if(this.password !== this.confirm_password) return this.error_message = 'Passwords do not match'
 
@@ -144,7 +148,7 @@ export default{
 
 .v-enter-active,
 .v-leave-active {
-  transition: opacity 1.3s ease;
+  transition: opacity 1s ease;
 }
 
 .v-enter-from,

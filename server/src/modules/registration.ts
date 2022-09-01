@@ -54,101 +54,126 @@ router.post('/', (req:any,res:any) => {
                 /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
               )
           }
+        if(!validateEmail(req.body.email)) return res.status(401).send({error: 'email not valid'})
 
-          if(!validateEmail(req.body.email)) return res.status(401).send({error: 'email not valid'})
-
-        await myDB.collection('users').findOne({"email":SHA256(req.body.email).toString()}).then(async (document:any) => {
-            if(document) return res.status(401).send({error: 'email already exists'})
-            
-
-            await myDB.collection('users').findOne({"username":req.body.username}).then(async (document:any) => {
-                if(document) return res.status(401).send({error: 'username already exists'})
-
-                let date = new Date()
-
-                let user_object :user_data = {
-                    id: uuidv4(),
-                    email: SHA256(req.body.email).toString(), 
-                    username: req.body.username,
-                    avatar: './avatars/default_avatar.png',
-                    profile_banner: './banners/default_banner.png',
-                    password: SHA256(req.body.password).toString(),
-                    birth_date: req.body.birth_date,
-                    user_description: '',
-                    address: '',
-                    zip_code: '',
-                    city: '',
-                    country: req.body.country,
-                    country_flag: req.body.country_flag,
-                    security_code: uuidv4(),
-                    steam_profile_link: '',
-                    discord_username: '',
-                    twitch_link: '',
-                    youtube_link: '',
-                    user_games: [],
-                    user_rank: 1,
-                    user_token_balance: 10,
-                    user_referral_link: '',
-                    user_referral_count: [],
-                    profile_authority: 'default',
-                    user_video_clips: [],
-                    status: 'pending',
-                    registration_date: `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
-                    last_login_date: '0',
-                }
+        async function mailer(){
+            var transporter = nodemailer.createTransport({
+                service: 'Mail.ru',
+                secure: false,
+                auth: {
+                    user: process.env.MAIL, 
+                    pass: process.env.MAIL_PASS,
+                }, 
+            })
         
-                await myDB.collection('users').insertOne(user_object, (err:any, doc:any) => {
-                    if (err) throw err
-                })
+            await transporter.sendMail({
+            from: process.env.MAIL,
+            to: req.body.email,
+            subject: `Thanks for joining ${process.env.PLATFORM_NAME}!`,
+            html: `
+                <h1 style="">we hope you will have the best game experience with us!</h1>
+            `,
+            })
+        }
+        mailer().then(async () => {
+            await myDB.collection('users').findOne({"email":SHA256(req.body.email).toString()}).then(async (document:any) => {
+                if(document) return res.status(401).send({error: 'email already exists'})
+                
     
-                interface view_method {
-                    type: Number,
-                    method: String,
-                }
+                await myDB.collection('users').findOne({"username":req.body.username}).then(async (document:any) => {
+                    if(document) return res.status(401).send({error: 'username already exists'})
     
-                const how_you_found_us :view_method = {
-                    type: 1,
-                    method: req.body.how_found_us
-                }
+                    let date = new Date()
     
-                await myDB.collection('platform_view_method').insertOne(how_you_found_us, (err:any, doc:any) => {
-                    if(err) throw err
-                })
-
-                    //send verification email here 
-
-                await myDB.collection('users').findOne({"email": SHA256(req.body.email).toString()}).then((doc:any) => {
-                    async function mailer(){
-                        var transporter = nodemailer.createTransport({
-                            service: 'Mail.ru',
-                            secure: true,
-                            auth: {
-                                user: process.env.MAIL, 
-                                pass: process.env.MAIL_PASS,
-                            }, 
-                        })
-                    
-                        await transporter.sendMail({
-                        from: process.env.MAIL,
-                        to: req.body.email,
-                        subject: `${process.env.PLATFORM_NAME} e-mail verification`,
-                        html: `
-                            <h1 style="">Please verify you account before login</h1>
-                            <a style="margin:auto; color:blue;" href='${process.env.WEBSITE_HOST}api/verify_email/${doc.id}'>Verify your account</a>
-                        `,
-                        })
+                    let user_object :user_data = {
+                        id: uuidv4(),
+                        email: SHA256(req.body.email).toString(), 
+                        username: req.body.username,
+                        avatar: './avatars/default_avatar.png',
+                        profile_banner: './banners/default_banner.png',
+                        password: SHA256(req.body.password).toString(),
+                        birth_date: req.body.birth_date,
+                        user_description: '',
+                        address: '',
+                        zip_code: '',
+                        city: '',
+                        country: req.body.country,
+                        country_flag: req.body.country_flag,
+                        security_code: uuidv4(),
+                        steam_profile_link: '',
+                        discord_username: '',
+                        twitch_link: '',
+                        youtube_link: '',
+                        user_games: [],
+                        user_rank: 1,
+                        user_token_balance: 10,
+                        user_referral_link: '',
+                        user_referral_count: [],
+                        profile_authority: 'default',
+                        user_video_clips: [],
+                        status: 'pending',
+                        registration_date: `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
+                        last_login_date: '0',
                     }
-                    mailer().catch((err:any) => {
-                        if(err) {
-                            console.log(err)
-                            return res.sendStatus(500)
-                        }
+            
+                    await myDB.collection('users').insertOne(user_object, (err:any, doc:any) => {
+                        if (err) throw err
                     })
-                    
-                    db.close()
-                    res.status(201).send({security_key: user_object.security_code})
+        
+                    interface view_method {
+                        type: Number,
+                        method: String,
+                    }
+        
+                    const how_you_found_us :view_method = {
+                        type: 1,
+                        method: req.body.how_found_us
+                    }
+        
+                    await myDB.collection('platform_view_method').insertOne(how_you_found_us, (err:any, doc:any) => {
+                        if(err) throw err
+                    })
+    
+                        //send verification email here 
+    
+                    await myDB.collection('users').findOne({"email": SHA256(req.body.email).toString()}).then((doc:any) => {
+                        async function mailer(){
+                            var transporter = nodemailer.createTransport({
+                                service: 'Mail.ru',
+                                secure: false,
+                                auth: {
+                                    user: process.env.MAIL, 
+                                    pass: process.env.MAIL_PASS,
+                                }, 
+                            })
+                        
+                            await transporter.sendMail({
+                            from: process.env.MAIL,
+                            to: req.body.email,
+                            subject: `${process.env.PLATFORM_NAME} account verification`,
+                            html: `
+                                <h1 style="">Please verify you account before login</h1>
+                                <a style="margin:auto; color:blue;" href='${process.env.WEBSITE_HOST}api/verify_email/${doc.id}'>Verify your account</a>
+                            `,
+                            })
+                        }
+                        mailer().then(() => {
+                            db.close()
+                            res.status(201).send({security_key: user_object.security_code})
+                        }).catch((err:any) => {
+                            if(err) {
+                                console.log(err)
+                                return res.status(401).send({error: 'The email you used is not a valid one'})
+                            }
+                        })
+                    })
                 })
             })
+        }).catch((err:any) => {
+            if(err) {
+                console.log(err)
+                return res.status(401).send({error: 'The email you used is not valid, please change it'})
+            }
         })
     })
 })
