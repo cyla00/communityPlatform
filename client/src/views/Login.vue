@@ -1,6 +1,8 @@
 <script>
 import Footer from '@/components/Footer.vue'
-import {default as country_list} from './country_list.json'
+const axios = require('axios')
+import jwt_decode from "jwt-decode"
+
 
 export default{
   name: 'Login_page',
@@ -9,15 +11,47 @@ export default{
   },
   data(){
     return{
-      email: null,
-      password: null,
-      day: null,
-      month: null,
-      year: null,
-      country: null,
-      countries: country_list,
-      secureCode: null,
-      viewMethod: null,
+      email: '',
+      password: '',
+      error_message: '',
+    }
+  },
+  methods: {
+    async login(){
+
+      const validateEmail = (email) => {
+        return email.match(
+          /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        )
+      }
+
+      if(this.email === '' || this.password === '') return this.error_message = 'Please fill all fields'
+      if(!validateEmail(this.email)) return this.error_message = 'Enter a valid email'
+
+      const basicAuth = {
+        auth: {
+          username: this.email,
+          password: this.password,
+        }
+      }
+      await axios.post('http://localhost:3000/api/login', {}, basicAuth).then((res) => {
+        localStorage.setItem('token', res.data.access_token)
+        const decoded_token = jwt_decode(localStorage.getItem('token'))
+        localStorage.setItem('id', decoded_token.id)
+        localStorage.setItem('username', decoded_token.username)
+        localStorage.setItem('email', decoded_token.email)
+        localStorage.setItem('country', decoded_token.country)
+        localStorage.setItem('user_rank', decoded_token.user_rank)
+        localStorage.setItem('authority', decoded_token.authority)
+        localStorage.setItem('status', decoded_token.status)
+        localStorage.setItem('avatar', decoded_token.avatar)
+        localStorage.setItem('profile_banner', decoded_token.profile_banner)
+        localStorage.setItem('last_login', decoded_token.last_login)
+
+        return window.location.href = '/dashboard'
+      }).catch((err) => {
+        return this.error_message = err.response.data.error
+      })
     }
   },
 }
@@ -33,9 +67,14 @@ export default{
       <div id="login-wrapper">
         
         <div id="login-form">
-          <h3>Log in</h3>
-          <input type="text" v-model="email">
-          <input type="text" v-model="password">
+          <h1>Log in</h1>
+          <input class="form-text" type="email" v-model="email" placeholder="Email">
+          <input class="form-text" type="password" v-model="password" placeholder="Password">
+
+          <button @click="login()">Login</button>
+          <p>I forgot my<a href="/recoverlogin" class="links"> password</a></p>
+          <p>Don't have an account?<a href="/registration" class="links"> Register</a></p>
+          <p style="color: red;">{{error_message}}</p>
         </div>
 
         <div id="login-image"></div>
@@ -66,11 +105,14 @@ Footer{
   display: grid;
   grid-template-columns: 1fr 1fr;
   height: 100%;
+  text-align: center;
 }
 
 #login-form{
   position: relative;
   margin: auto;
+  text-align: center;
+  width: 25em;
 }
 
 #login-image{
@@ -80,5 +122,50 @@ Footer{
   box-shadow: 0 0 50px 50px #060304 inset;
   background-size: cover;
   background-repeat: no-repeat;
+}
+
+.form-text{
+  width: 100%;
+  font-size: 1.1em;
+  background: #4d4d4d;
+  border: solid 1px #C9AE66;
+  color: #ffffff;
+  border-radius: 20px;
+  padding: 0.8em;
+  outline:none;
+  font-family: Poppins;
+  display: flex;
+  margin: auto;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+button{
+  width: 8em;
+  justify-content: center;
+  margin-top: 1em;
+  padding: 0.7em;
+  border: solid 1px #ffffff;
+  border-radius: 20px;
+  text-decoration: none;
+  color: #03030F;
+  font-size: 1rem;
+  font-weight: bold;
+  background: linear-gradient(to bottom left, #C9AE66, #FBF3A1);
+}
+button:hover{
+  background: linear-gradient(to bottom left, #4D2E86, #0B4ECC);
+  transition: 0.1s;
+  box-shadow: 0px 0px 10px 0px #F1DFF1;
+  color: #ffffff;
+}
+
+::placeholder {
+  color: #C9AE66;
+  opacity: 1;
+}
+
+.links{
+  color: #C9AE66;
 }
 </style>

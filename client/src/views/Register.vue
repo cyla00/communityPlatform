@@ -237,6 +237,7 @@ Footer{
 #registration-form{
   position: relative;
   margin: auto;
+  width: 25em;
 }
 
 #registration-image{
@@ -339,4 +340,5 @@ button:hover{
 .error-mgs{
   color: red;
 }
+
 </style>

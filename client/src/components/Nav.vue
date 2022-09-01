@@ -14,6 +14,12 @@ export default{
         sidebarWidth,
     }
   },
+  methods: {
+    logout(){
+        localStorage.clear()
+        window.location.href = '/login'
+    }
+  }
 }
 </script>
 
@@ -34,7 +40,7 @@ export default{
             <SidebarLink to="/games" icon="bx bx-play-circle bx-md">Games</SidebarLink>
             <SidebarLink to="/bank" icon="bx bxs-bank bx-md">Bank</SidebarLink>
             <SidebarLink to="/shop" icon="bx bx-store-alt bx-md">Shop</SidebarLink>
-            <SidebarLink id="logout-link" to="" icon="bx bx-log-out-circle bx-md">Logout</SidebarLink>
+            <SidebarLink id="logout-link" to="" icon="bx bx-log-out-circle bx-md" @click="logout()">Logout</SidebarLink>
         </div>
 
         <span class="collapsed-icon" @click="toggleSidebar" :class="{'rotate-180': collapsed}">

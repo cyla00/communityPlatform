@@ -11,6 +11,8 @@ import SalesTerms from '@/views/SalesTerms.vue'
 import PrivacyPolicy from '@/views/PrivacyPolicy.vue'
 import ContactUs from '@/views/ContactUs.vue'
 import FAQ from '@/views/FAQ.vue'
+import Restorelogin from '@/views/Restorelogin.vue'
+import token_check from '@/router/TokenCheck'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -21,37 +23,70 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/registration',
     name: 'Register',
-    component: Register
+    component: Register,
+    beforeEnter: async (to, from, next) => {
+      
+      next()
+    }
   },
   {
     path: '/login',
     name: 'Login_page',
-    component: Login
+    component: Login,
+    beforeEnter: async (to, from, next) => {
+      
+      next()
+    }
+  },
+  {
+    path: '/recoverlogin',
+    name: 'Restorelogin',
+    component: Restorelogin
   },
   {
     path: '/dashboard',
     name: 'Dashboard',
-    component: Dashboard
+    component: Dashboard,
+    beforeEnter: async (to, from, next) => {
+      await token_check()
+      next()
+    }
   },
   {
     path: '/profile/:id',
     name: 'Profile',
-    component: Profile
+    component: Profile,
+    beforeEnter: async (to, from, next) => {
+      await token_check()
+      next()
+    }
   },
   {
     path: '/games',
     name: 'Games',
-    component: Games
+    component: Games,
+    beforeEnter: async (to, from, next) => {
+      await token_check()
+      next()
+    }
   },
   {
     path: '/bank',
     name: 'Bank',
-    component: Bank
+    component: Bank,
+    beforeEnter: async (to, from, next) => {
+      await token_check()
+      next()
+    }
   },
   {
     path: '/shop',
     name: 'Shop',
-    component: Shop
+    component: Shop,
+    beforeEnter: async (to, from, next) => {
+      await token_check()
+      next()
+    }
   },
   {
     path: '/terms-condition-sale',

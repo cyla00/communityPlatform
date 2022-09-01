@@ -16,8 +16,8 @@ router.post('/', async (req:any,res:any) => {
         const [email, password] :string[] = Buffer.from(b64auth, 'base64').toString().split(':')
 
         await myDb.collection('users').findOne({email: SHA256(email).toString(), password: SHA256(password).toString()}).then(async (user:any) => {
-            if(!user) return res.sendStatus(401)
-            if(user.status === 'pending') return res.sendStatus(401)
+            if(!user) return res.status(401).send({error: 'Incorrect credentials'})
+            if(user.status === 'pending') return res.status(401).send({error: 'Please verify your email before login'})
             let myquery = {id: user.id}
             let date = new Date()
             let newvalues = {$set: {last_login_date: `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} - ${date.getHours()}:${date.getMinutes()}`}}

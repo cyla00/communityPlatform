@@ -8,6 +8,7 @@ var cookieParser = require('cookie-parser')
 
 import registration  from './modules/registration'
 import login  from './modules/login'
+import token  from './modules/token'
 import email_verification  from './modules/email_verification'
 import { jwt_verification } from './modules/jwt_verification'
 
@@ -26,6 +27,7 @@ app.use(cookieParser())
 app.use('/api/registration', registration)
 app.use('/api/verify_email', email_verification)
 app.use('/api/login', login)
+app.use('/api/token', jwt_verification, token)
 
 
 
