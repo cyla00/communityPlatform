@@ -13,6 +13,7 @@ import ContactUs from '@/views/ContactUs.vue'
 import FAQ from '@/views/FAQ.vue'
 import Restorelogin from '@/views/Restorelogin.vue'
 import token_check from '@/router/TokenCheck'
+import Err404 from '@/views/Err404.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -108,7 +109,12 @@ const routes: Array<RouteRecordRaw> = [
     name: 'FAQ',
     component: FAQ
   },
+  {
+    path: '/:allPath(.*)',
+    component: Err404,
+  },
 ]
+
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
