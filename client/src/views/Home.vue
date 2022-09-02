@@ -2,6 +2,7 @@
 import Footer from '@/components/Footer.vue'
 import HomeServices from '@/components/HomeServices.vue'
 import Homelastsektor from '@/components/Homelastsektor.vue'
+const axios = require('axios')
 
 export default{
   name: 'Home',
@@ -13,6 +14,7 @@ export default{
   data(){
     return{
       scrollPosition: null,
+      logged: false,
     }
   },
   methods: {
@@ -20,8 +22,24 @@ export default{
        this.scrollPosition = window.scrollY
     }
   },
-  mounted() {
+  async mounted() {
     window.addEventListener('scroll', this.updateScroll);
+
+    const  token  = localStorage.getItem('token')
+    if(!token) return
+
+    const tokenData = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
+
+    await axios.post('http://localhost:3000/api/token', {}, tokenData).then((res) => {
+      if(res.status == 200) return this.logged = true
+    }).catch((err) => {
+      return this.logged = false
+    })
+
   }
 }
 </script>
@@ -43,8 +61,9 @@ export default{
                 <li class="link-icon-social"><a target="_blank" class="social-links" href="#"><i class='bx bxl-tiktok bx-sm'></i></a></li>
                 <li class="link-icon-social"><a target="_blank" class="social-links" href="#"><i class='bx bxl-instagram-alt bx-sm'></i></a></li>
                 <li class="link-icon-social"><a target="_blank" class="social-links" href="#"><i class='bx bxl-twitter bx-sm'></i></a></li>
-                <li><a class="user-links" href="/login">Login</a></li>
-                <li><a class="user-links" href="/registration">Join us!</a></li>
+                <li><a v-if="!logged" class="user-links" href="/login">Login</a></li>
+                <li><a v-if="!logged" class="user-links" href="/registration">Join us!</a></li>
+                <li><a v-if="logged" class="user-links" href="/dashboard">Dashboard</a></li>
             </ul>
         </nav>
       </header>

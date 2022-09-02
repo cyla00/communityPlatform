@@ -18,7 +18,11 @@ export default{
       <header>
         <a href="/"><img src="https://i.ibb.co/L5qBmym/avatar-removebg-preview.png" alt=""></a>
       </header>
-        restore pass
+        
+      <div id="wrapper">
+        
+      </div>
+
     </div>
 </template>
 

@@ -23,10 +23,12 @@ export default{
       accept_check: false,
       form_correct: false,
       error_message: '',
+      success_message: '',
+      loading_message: '',
     }
   },
   methods:{
-    checkFields(){
+    async checkFields(){
       const validateEmail = (email) => {
         return email.match(
           /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -50,6 +52,8 @@ export default{
       if(!passwordCheck(this.password)) return this.error_message = 'Use a secure password! (ex: AaZz19@#$)'
       if(!this.accept_check) return this.error_message = 'Please accept our terms and conditions'
 
+      this.loading_message = 'Checking credentials ...'
+
       const body = {
         username: this.username,
         email: this.email,
@@ -59,8 +63,12 @@ export default{
         how_found_us: this.viewMethod,
       }
 
-      axios.post('http://localhost:3000/api/registration', body).then((res) => {
+    
+      await axios.post('http://localhost:3000/api/registration', body).then((res) => {
+        this.loading_message = ''
+        this.error_message = ''
         if(res.status === 201) {
+          this.success_message = 'Registration successful, copy your key!'
           this.secureCode = res.data.security_key
           this.form_correct = true
         }
@@ -118,7 +126,9 @@ export default{
           
           <button @click="checkFields()">Ready to start!</button>
           <p>Already have an account?<a href="/login" id="login-goto"> Login</a></p>
-          <p style="color: red;">{{error_message}}</p>
+          <p style="color: #f2f2f2;">{{loading_message}}</p>
+          <p style="color: #ff605c;">{{error_message}}</p>
+          <p style="color: #00ca4e;">{{success_message}}</p>
           
           
             <Teleport to="body">
@@ -148,7 +158,7 @@ export default{
 
 .v-enter-active,
 .v-leave-active {
-  transition: opacity 1s ease;
+  transition: opacity 0.8s ease;
 }
 
 .v-enter-from,
