@@ -29,6 +29,10 @@ export default{
   },
   methods:{
     async checkFields(){
+
+      this.error_message = ''
+      this.loading_message = ''
+
       const validateEmail = (email) => {
         return email.match(
           /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -49,7 +53,7 @@ export default{
         return strongPassword.test(passwordStrenght)
       }
 
-      if(!passwordCheck(this.password)) return this.error_message = 'Use a secure password! (ex: AaZz19@#$)'
+      if(!passwordCheck(this.password)) return this.error_message = 'Use a stronger password! (ex: AaZz19@#$)'
       if(!this.accept_check) return this.error_message = 'Please accept our terms and conditions'
 
       this.loading_message = 'Checking credentials ...'
@@ -116,6 +120,7 @@ export default{
             <option>YouTube</option>
             <option>Social Media</option>
             <option>Gaming communities</option>
+            <option>Friends</option>
             <option>Other</option>
           </select>
 

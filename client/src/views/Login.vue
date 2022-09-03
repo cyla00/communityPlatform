@@ -18,7 +18,6 @@ export default{
   },
   methods: {
     async login(){
-
       const validateEmail = (email) => {
         return email.match(
           /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -38,14 +37,6 @@ export default{
         localStorage.setItem('token', res.data.access_token)
         const decoded_token = jwt_decode(localStorage.getItem('token'))
         localStorage.setItem('id', decoded_token.id)
-        localStorage.setItem('username', decoded_token.username)
-        localStorage.setItem('email', decoded_token.email)
-        localStorage.setItem('country', decoded_token.country)
-        localStorage.setItem('user_rank', decoded_token.user_rank)
-        localStorage.setItem('authority', decoded_token.authority)
-        localStorage.setItem('status', decoded_token.status)
-        localStorage.setItem('avatar', decoded_token.avatar)
-        localStorage.setItem('profile_banner', decoded_token.profile_banner)
         localStorage.setItem('last_login', decoded_token.last_login)
 
         return window.location.href = '/dashboard'
@@ -74,7 +65,7 @@ export default{
           <button @click="login()">Login</button>
           <p>I forgot my<a href="/recoverlogin" class="links"> password</a></p>
           <p>Don't have an account?<a href="/registration" class="links"> Register</a></p>
-          <p style="color: red;">{{error_message}}</p>
+          <p style="color: #ff605c;">{{error_message}}</p>
         </div>
 
         <div id="login-image"></div>

@@ -81,7 +81,10 @@ router.post('/', (req:any,res:any) => {
                 
     
                 await myDB.collection('users').findOne({"username":req.body.username}).then(async (document:any) => {
-                    if(document) return res.status(401).send({error: 'username already exists'})
+                    if(document) {
+                        db.close()
+                        return res.status(401).send({error: 'username already exists'})
+                    }
     
                     let date = new Date()
     
@@ -117,7 +120,10 @@ router.post('/', (req:any,res:any) => {
                     }
             
                     await myDB.collection('users').insertOne(user_object, (err:any, doc:any) => {
-                        if (err) throw err
+                        if (err){
+                            db.close()
+                            return res.status(500).send({error: 'The email you used is not valid, please change it'})
+                        }
                     })
         
                     interface view_method {
@@ -131,7 +137,10 @@ router.post('/', (req:any,res:any) => {
                     }
         
                     await myDB.collection('platform_view_method').insertOne(how_you_found_us, (err:any, doc:any) => {
-                        if(err) throw err
+                        if(err){
+                            db.close()
+                            return res.status(500).send({error: 'The email you used is not valid, please change it'})
+                        }
                     })
     
                         //send verification email here 
@@ -153,7 +162,7 @@ router.post('/', (req:any,res:any) => {
                             subject: `${process.env.PLATFORM_NAME} account verification`,
                             html: `
                                 <h1 style="">Please verify you account before login</h1>
-                                <a style="margin:auto; color:blue;" href='${process.env.WEBSITE_HOST}api/verify_email/${doc.id}'>Verify your account</a>
+                                <a style="margin:auto; color:blue;" href='${process.env.WEBSITE_HOST}api/verify-email/${doc.id}'>Verify your account</a>
                             `,
                             })
                         }
@@ -162,7 +171,7 @@ router.post('/', (req:any,res:any) => {
                             res.status(201).send({security_key: user_object.security_code})
                         }).catch((err:any) => {
                             if(err) {
-                                console.log(err)
+                                db.close()
                                 return res.status(401).send({error: 'The email you used is not a valid one'})
                             }
                         })
@@ -171,7 +180,7 @@ router.post('/', (req:any,res:any) => {
             })
         }).catch((err:any) => {
             if(err) {
-                console.log(err)
+                db.close()
                 return res.status(401).send({error: 'The email you used is not valid, please change it'})
             }
         })

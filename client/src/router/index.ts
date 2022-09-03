@@ -13,6 +13,7 @@ import ContactUs from '@/views/ContactUs.vue'
 import FAQ from '@/views/FAQ.vue'
 import Restorelogin from '@/views/Restorelogin.vue'
 import Err404 from '@/views/Err404.vue'
+import Resetpass from '@/views/reset_pass.vue'
 const axios = require('axios')
 
 
@@ -54,6 +55,14 @@ const routes: Array<RouteRecordRaw> = [
       public: true,
     },
     component: Restorelogin
+  },
+  {
+    path: '/reset-password/:id/:key',
+    name: 'Resetpass',
+    meta: {
+      public: true,
+    },
+    component: Resetpass
   },
   {
     path: '/dashboard',

@@ -8,7 +8,10 @@ const client = openDbConnection()
 router.get('/:id', async (req:any,res:any) => {
 
     await client.connect( async (err:any, db:any) => {
-        if(err) throw err
+        if(err){
+            db.close()
+            return res.sendStatus(500)
+        }
 
         const myDB = db.db(process.env.MONGO_DATABASE) 
 
