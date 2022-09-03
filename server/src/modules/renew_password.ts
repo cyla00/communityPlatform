@@ -65,9 +65,7 @@ router.post('/', async (req:any,res:any) => {
                 return res.status(200).send({success: 'Password successfully changed, login to your account', key: new_key})
             })
 
-        }).catch((err:any) => {
-            console.log(err);
-            
+        }).catch((err:any) => { 
             db.close()
             return res.status(403).send({error: 'Reset failed, plese contact support'})
         })

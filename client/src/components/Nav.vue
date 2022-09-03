@@ -1,6 +1,8 @@
 <script>
 import {collapsed, toggleSidebar, sidebarWidth} from './state'
 import SidebarLink from './SidebarLink.vue'
+const axios = require('axios')
+import jwt_decode from "jwt-decode"
 
 export default{
   name: 'Nav',
@@ -12,13 +14,17 @@ export default{
         collapsed,
         toggleSidebar,
         sidebarWidth,
+        isadmin: false
     }
   },
   methods: {
     logout(){
         localStorage.clear()
         window.location.href = '/login'
-    }
+    },
+  },
+  mounted(){
+    
   }
 }
 </script>
@@ -35,6 +41,7 @@ export default{
             </transition>
         </h1>
         <div id="sidebar-links-wrapper">
+            <SidebarLink to="/admin" icon="bx bxs-check-shield bx-md" v-if="isadmin">Admin</SidebarLink>
             <SidebarLink to="/dashboard" icon="bx bxs-dashboard bx-md">Dashboard</SidebarLink>
             <SidebarLink to="/profile/{{user_id}}" icon="bx bx-user bx-md">User</SidebarLink>
             <SidebarLink to="/games" icon="bx bx-play-circle bx-md">Games</SidebarLink>

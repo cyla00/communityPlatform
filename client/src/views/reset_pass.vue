@@ -195,7 +195,7 @@ Footer{
 }
 
 #recovery-image{
-  /* background-image: url('../../public/login-img.jpg'); */
+  background-image: url('../../public/renew-bg.jpg');
   -webkit-box-shadow: 0 0 50px 50px #060304 inset;
   -moz-box-shadow: 0 0 50px 50px #060304 inset;
   box-shadow: 0 0 50px 50px #060304 inset;

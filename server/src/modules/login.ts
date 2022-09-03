@@ -3,6 +3,7 @@ const router = express.Router()
 const SHA256 = require('crypto-js/sha256')
 const jwt = require('jsonwebtoken')
 
+import { isRegularExpressionLiteral } from 'typescript'
 import { openDbConnection } from './database'
 
 const client = openDbConnection()

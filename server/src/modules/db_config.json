@@ -8,6 +8,7 @@
         "platform_view_method",
         "communities",
         "partners",
-        "events"
+        "events",
+        "banned_users"
     ]
  }

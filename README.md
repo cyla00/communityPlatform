@@ -1,11 +1,32 @@
+# 1 setup nodemailer email to send emails
+# 2 create jwt keys
+# 3 create database
+
+
 ### env structure
+PROJECT_STATUS='development' # production <br>
+
+PLATFORM_NAME=HarderGamers <br>
+SECRET_KEY='' jwt<br>
+REFRESH_KEY='' jwt<br>
+
 SERVER_PORT=3000 <br>
-MONGO_USER=''<br>
-MONGO_PASSWORD=''<br>
-MONGO_DATABASE=''<br>
-MONGO_HOST=''<br>
-MONGO_PORT=27017<br>
-WEBSITE_HOST='http://localhost:3000/'<br>
+MONGO_USER='' <br>
+MONGO_PASSWORD='' <br>
+MONGO_DATABASE='communitydb' <br>
+MONGO_HOST='localhost' <br>
+MONGO_PORT=27017 <br>
+
+# MAILER <br>
+MAIL_PROVIDER='Mail.ru' <br>
+MAIL='' <br>
+MAIL_PASS='' <br>
+
+WEBSITE_HOST='http://localhost:3000/' <br>
+
+# NPMs
+
+body-parser, cookie-parser, cors, crypto-js, dotenv, express, jsonwebtoken, mongodb, nodemailer, nodemon, ts-node, typescript, uuid <br>
 
 ### step 1:<br>
 download mongodb.<br>
