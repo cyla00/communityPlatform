@@ -38,6 +38,7 @@ export default{
         const decoded_token = jwt_decode(localStorage.getItem('token'))
         localStorage.setItem('id', decoded_token.id)
         localStorage.setItem('last_login', decoded_token.last_login)
+        localStorage.setItem('authority', decoded_token.authority)
 
         return window.location.href = '/dashboard'
       }).catch((err) => {

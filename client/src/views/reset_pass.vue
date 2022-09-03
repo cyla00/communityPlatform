@@ -79,7 +79,7 @@ export default{
               <Transition>
               <div id="modal-back" v-if="success">
                     <div class="modal">
-                        <i class='bx bxs-bell-ring bx-md'></i>
+                        <i class='bx bxs-error bx-md'></i>
                         <h1>New key generated</h1>
                         <p>Save your key somewhere safe! <br> you will need it to recover your profile.</p>
                         <p id="sek-title">This is your new secret key:</p>

@@ -34,12 +34,39 @@ router.post('/', async (req:any,res:any) => {
                     db.close()
                     return res.sendStatus(500)
                 }
+
                 
+                if(user.is_admin) {
+                    const token = jwt.sign({
+                        id: user.id,
+                        last_login: user.last_login_date,
+                        is_admin: user.is_admin,
+                        is_staff: user.is_staff,
+                        authority: 'admin'
+                    }, process.env.SECRET_KEY, {expiresIn: '3 hours'})
+                    return res.status(200).json({ access_token: `${token}` })
+                }
+
+                if(user.is_staff) {
+                    const token = jwt.sign({
+                        id: user.id,
+                        last_login: user.last_login_date,
+                        is_admin: user.is_admin,
+                        is_staff: user.is_staff,
+                        authority: 'staff'
+                    }, process.env.SECRET_KEY, {expiresIn: '3 hours'})
+                    return res.status(200).json({ access_token: `${token}` })
+                }
+
                 const token = jwt.sign({
                     id: user.id,
                     last_login: user.last_login_date,
+                    is_admin: user.is_admin,
+                    is_staff: user.is_staff,
+                    authority: 'user'
                 }, process.env.SECRET_KEY, {expiresIn: '3 hours'})
 
+                 
                 return res.status(200).json({ access_token: `${token}` })
             })
         })

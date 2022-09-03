@@ -15,6 +15,7 @@ import Restorelogin from '@/views/Restorelogin.vue'
 import Err404 from '@/views/Err404.vue'
 import Resetpass from '@/views/reset_pass.vue'
 import Admin from '@/views/Admin.vue'
+import Staff from '@/views/Staff.vue'
 import jwt_decode from "jwt-decode"
 const axios = require('axios')
 
@@ -83,7 +84,15 @@ const routes: Array<RouteRecordRaw> = [
     component: Admin,
   },
   {
-    path: '/profile/:id',
+    path: '/staff',
+    name: 'Staff',
+    meta: {
+      public: false,
+    },
+    component: Staff,
+  },
+  {
+    path: '/profile',
     name: 'Profile',
     component: Profile,
     meta: {
@@ -179,7 +188,7 @@ router.beforeEach(async (to, from, next) =>
       return next('/')
     }
     await axios.post('http://localhost:3000/api/token', {}, tokenData).then(async (res:any) => {
-      if(to.path !== '/admin' && res.status == 200) return next()
+      if(to.path !== '/admin' && to.path !== '/staff') return next()
 
       interface token_data {
         exp: number,
@@ -190,10 +199,16 @@ router.beforeEach(async (to, from, next) =>
         last_login: string
       }
       const decoded_token :token_data = jwt_decode(token)
-      
-      if(!decoded_token.is_admin) return next('dashboard')
-      console.log(decoded_token)
-      return next()
+
+      if(to.path === '/admin' && res.status == 200){
+        if(!decoded_token.is_admin) return next('/dashboard')
+        return next()
+      }
+
+      if(to.path === '/staff' && res.status == 200){
+        if(!decoded_token.is_staff) return next('/dashboard')
+        return next()
+      }
     }).catch((err:any) => {
       localStorage.clear()
       return next('/')

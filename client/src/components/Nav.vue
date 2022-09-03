@@ -2,7 +2,6 @@
 import {collapsed, toggleSidebar, sidebarWidth} from './state'
 import SidebarLink from './SidebarLink.vue'
 const axios = require('axios')
-import jwt_decode from "jwt-decode"
 
 export default{
   name: 'Nav',
@@ -14,7 +13,8 @@ export default{
         collapsed,
         toggleSidebar,
         sidebarWidth,
-        isadmin: false
+        authority: localStorage.getItem('authority'),
+        user_id: localStorage.getItem('id'),
     }
   },
   methods: {
@@ -41,9 +41,10 @@ export default{
             </transition>
         </h1>
         <div id="sidebar-links-wrapper">
-            <SidebarLink to="/admin" icon="bx bxs-check-shield bx-md" v-if="isadmin">Admin</SidebarLink>
+            <SidebarLink to="/admin" icon="bx bxs-check-shield bx-md" v-if="authority == 'admin'">Admin</SidebarLink>
+            <SidebarLink to="/staff" icon="bx bx-donate-heart bx-md" v-if="authority == 'staff'">Staff</SidebarLink>
             <SidebarLink to="/dashboard" icon="bx bxs-dashboard bx-md">Dashboard</SidebarLink>
-            <SidebarLink to="/profile/{{user_id}}" icon="bx bx-user bx-md">User</SidebarLink>
+            <SidebarLink to="/profile" icon="bx bx-user bx-md">User</SidebarLink>
             <SidebarLink to="/games" icon="bx bx-play-circle bx-md">Games</SidebarLink>
             <SidebarLink to="/bank" icon="bx bxs-bank bx-md">Bank</SidebarLink>
             <SidebarLink to="/shop" icon="bx bx-store-alt bx-md">Shop</SidebarLink>
