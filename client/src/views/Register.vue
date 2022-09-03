@@ -141,7 +141,7 @@ export default{
               <div id="modal-back" v-if="form_correct">
                 <div class="modal">
                   <h1>welcome in the platform!</h1>
-                  <p>Save your key somewhere! <br> you will need it to recover your profile.</p>
+                  <p>Save your key somewhere safe! <br> you will need it to recover your profile.</p>
                   <p id="sek-title">This is your secret key:</p>
                   <p id="secure_code">{{secureCode}}</p>
                   <i class='bx bx-envelope bx-md'></i>

@@ -76,7 +76,7 @@ router.post('/', (req:any,res:any) => {
             })
         }
         mailer().then(async () => {
-            await myDB.collection('users').findOne({"email":SHA256(req.body.email).toString()}).then(async (document:any) => {
+            await myDB.collection('users').findOne({"email":req.body.email}).then(async (document:any) => {
                 if(document) return res.status(401).send({error: 'email already exists'})
                 
     
@@ -87,10 +87,11 @@ router.post('/', (req:any,res:any) => {
                     }
     
                     let date = new Date()
-    
+                    const key = uuidv4()
+                    const hashed_key = SHA256(key).toString()
                     let user_object :user_data = {
                         id: uuidv4(),
-                        email: SHA256(req.body.email).toString(), 
+                        email: req.body.email, 
                         username: req.body.username,
                         avatar: './avatars/default_avatar.png',
                         profile_banner: './banners/default_banner.png',
@@ -102,7 +103,7 @@ router.post('/', (req:any,res:any) => {
                         city: '',
                         country: req.body.country,
                         country_flag: req.body.country_flag,
-                        security_code: uuidv4(),
+                        security_code: hashed_key,
                         steam_profile_link: '',
                         discord_username: '',
                         twitch_link: '',
@@ -145,7 +146,7 @@ router.post('/', (req:any,res:any) => {
     
                         //send verification email here 
     
-                    await myDB.collection('users').findOne({"email": SHA256(req.body.email).toString()}).then((doc:any) => {
+                    await myDB.collection('users').findOne({"email": req.body.email}).then((doc:any) => {
                         async function mailer(){
                             var transporter = nodemailer.createTransport({
                                 service: 'Mail.ru',
@@ -168,11 +169,11 @@ router.post('/', (req:any,res:any) => {
                         }
                         mailer().then(() => {
                             db.close()
-                            res.status(201).send({security_key: user_object.security_code})
+                            res.status(201).send({security_key: key})
                         }).catch((err:any) => {
                             if(err) {
                                 db.close()
-                                return res.status(401).send({error: 'The email you used is not a valid one'})
+                                return res.status(401).send({error: 'An error occurred, contact support for help'})
                             }
                         })
                     })

@@ -38,7 +38,6 @@ export default{
         }
 
         axios.post('http://localhost:3000/api/set-pass', data).then((res) => {
-            console.log(res)
             this.key = res.data.key
             this.checking_message = ''
             this.success_message = res.data.success

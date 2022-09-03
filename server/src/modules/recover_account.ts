@@ -14,7 +14,7 @@ router.post('/', async (req:any,res:any) => {
 
         const myDB = db.db(process.env.MONGO_DATABASE) 
 
-        let myquery = {email: SHA256(req.body.email).toString(), security_code: req.body.secret_key}
+        let myquery = {email: req.body.email, security_code: SHA256(req.body.secret_key).toString()}
 
         await myDB.collection('users').findOne(myquery).then((document:any) => { 
 
@@ -36,7 +36,7 @@ router.post('/', async (req:any,res:any) => {
                 subject: `${process.env.PLATFORM_NAME} account recovery`,
                 html: `
                     <h1 style="">Please follow the link to recover your account</h1>
-                    <a style="margin:auto; color:blue;" href='http://localhost:8081/reset-password/${document.id}/${document.security_code}'>Reset password</a>
+                    <a style="margin:auto; color:blue;" href='http://localhost:8080/reset-password/${document.id}/${req.body.secret_key}'>Reset password</a>
                 `,
                 })
             }

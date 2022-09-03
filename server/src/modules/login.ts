@@ -18,7 +18,7 @@ router.post('/', async (req:any,res:any) => {
         const b64auth = (req.headers.authorization || '').split(' ')[1] || ''
         const [email, password] :string[] = Buffer.from(b64auth, 'base64').toString().split(':')
 
-        await myDb.collection('users').findOne({email: SHA256(email).toString(), password: SHA256(password).toString()}).then(async (user:any) => {
+        await myDb.collection('users').findOne({email: email, password: SHA256(password).toString()}).then(async (user:any) => {
             if(!user){
                 db.close()
                 return res.status(401).send({error: 'Incorrect credentials'})
