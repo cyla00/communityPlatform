@@ -18,7 +18,7 @@ export default{
 <template>
     <div>
         <Nav/>
-        <div :style="{'margin-left': sidebarWidth}">
+        <div :style="{'margin-left': sidebarWidth}" id="wrapper">
 
           <!-- contenuto pagina qui -->
           <h1>staff page</h1>
@@ -28,5 +28,8 @@ export default{
 </template>
 
 <style scoped>
-
+#wrapper{
+  padding: 0.25em;
+  padding-left: 0.8em;
+}
 </style>

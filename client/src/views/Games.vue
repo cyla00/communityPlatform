@@ -16,9 +16,9 @@ export default{
 </script>
 
 <template>
-    <div>
+    <div id="main">
         <Nav/>
-        <div :style="{'margin-left': sidebarWidth}">
+        <div :style="{'margin-left': sidebarWidth}" id="wrapper">
 
           <!-- contenuto pagina qui -->
           <h1>games</h1>
@@ -27,6 +27,16 @@ export default{
     </div>
 </template>
 
-<style scoped>
 
+<style scoped>
+#main{
+  height: 100vh;
+  width: 100vw;
+  background: #161923;
+}
+
+#wrapper{
+  padding: 0.25em;
+  padding-left: 0.8em;
+}
 </style>

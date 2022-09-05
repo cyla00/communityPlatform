@@ -31,7 +31,6 @@ router.post('/', async (req:any,res:any) => {
             const userData :Array<Object> = []
 
             data.forEach((element:any) => {
-                console.log(element);
                 userData.push({
                     id: element.id,
                     email: element.email,

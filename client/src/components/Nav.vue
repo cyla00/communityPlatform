@@ -10,6 +10,7 @@ export default{
   components: {
     SidebarLink,
   },
+  props: ['username', 'rank'],
   data(){
     return{
         collapsed,
@@ -17,8 +18,6 @@ export default{
         sidebarWidth,
         authority: localStorage.getItem('authority'),
         user_id: localStorage.getItem('id'),
-        username: jwt_decode(localStorage.getItem('token')).username,
-        rank: undefined,
     }
   },
   methods: {
@@ -26,42 +25,7 @@ export default{
         localStorage.clear()
         window.location.href = '/login'
     },
-    async getUserData(){
-
-        const data = {
-            headers: {
-                authorization: `Bearer ${localStorage.getItem('token')}`
-            }
-        }
-
-        await axios.post('http://localhost:3000/api/update-user-data', {}, data).catch((err) => {
-            console.log(err)
-            return
-      })
-    },
   },
-  created(){
-        this.getUserData()
-      const socket = io('http://localhost:3000', {
-            transportOptions: {
-                polling: {
-                    extraHeaders: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                    },
-                },
-            },
-        })
-        socket.on('connect', (data) => {
-            
-        })
-
-        socket.on('data', function(data) {
-            data.forEach(element => {
-                console.log(element)
-            });
-            socket.disconnect()
-        })
-  }
 }
 </script>
 
@@ -77,7 +41,7 @@ export default{
                     </div>
                     <div id="status-wrapper"></div>
                     <p id="username">{{username}}</p>
-                    <p id="rank"><i class='bx bxs-star bx-sm'></i>{{rank}}</p>
+                    <p id="rank"><i class='bx bxs-star bx-sm'></i> {{rank}}</p>
                 </div>
             </transition>
         </div>

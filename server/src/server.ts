@@ -64,14 +64,9 @@ app.use('/api/update-user-data', jwt_verification, update_user_data)
 
 
 io.on('connection', async (socket:any) => {
-    console.log('A user connected')
+
     await socket.join('data_fetch')
-
-
     await io.sockets.in('data_fetch').emit('data', user_data)
-    socket.on('disconnect', () => {
-        console.log('socket off')
-      })
 })
 
 
