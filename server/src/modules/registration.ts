@@ -40,6 +40,7 @@ router.post('/', (req:any,res:any) => {
         status: String,
         registration_date: String,
         last_login_date: String,
+        friends_list: Array<Object>,
     }
 
 
@@ -73,7 +74,7 @@ router.post('/', (req:any,res:any) => {
             subject: `Thanks for joining ${process.env.PLATFORM_NAME}!`,
             html: `
             <div style="width: 100%; background: #161515; padding: 2em;">
-                <div style="width: 30%; margin: auto; padding: 1em;">
+                <div style="width: 80%; margin: auto; padding: 1em;">
                     <img alt="hg" height="120" src="https://i.imgur.com/muqySE8.png" style="max-width: 100%; border-style: none; width: 325px; height: 120px;" width="123">
                 </div>
                 <div style="width: 30%; text-align: center; margin: auto; background: #ffffff; padding: 1em;">
@@ -138,6 +139,7 @@ router.post('/', (req:any,res:any) => {
                         status: 'pending',
                         registration_date: `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
                         last_login_date: '0',
+                        friends_list: [],
                     }
             
                     await myDB.collection('users').insertOne(user_object, (err:any, doc:any) => {

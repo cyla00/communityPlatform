@@ -26,20 +26,40 @@ export default{
         localStorage.clear()
         window.location.href = '/login'
     },
+    async getUserData(){
+
+        const data = {
+            headers: {
+                authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        }
+
+        await axios.post('http://localhost:3000/api/update-user-data', {}, data).then((res) => {
+            console.log(res);
+        }).catch((err) => {
+            console.log(err)
+            return
+      })
+    },
   },
   created(){
-    const socket = io('http://localhost:3000', {
-        transportOptions: {
-            polling: {
-                extraHeaders: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      const socket = io('http://localhost:3000', {
+            transportOptions: {
+                polling: {
+                    extraHeaders: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    },
                 },
             },
-        },
-    })
-    socket.on('data', (data) => {
-        this.rank = data.rank
-    })
+        })
+        socket.on('connect', (data) => {
+            console.log('connected')
+        })
+
+        socket.on('data', function(data) {
+            console.log(data)
+            socket.disconnect()
+        })
   }
 }
 </script>
@@ -62,7 +82,7 @@ export default{
         </div>
         <div id="sidebar-links-wrapper">
             <SidebarLink to="/admin" icon="bx bxs-check-shield bx-md" v-if="authority == 'admin'">Admin</SidebarLink>
-            <SidebarLink to="/staff" icon="bx bx-donate-heart bx-md" v-if="authority == 'staff'">Staff</SidebarLink>
+            <SidebarLink @click="getUserData()" to="/staff" icon="bx bx-donate-heart bx-md" v-if="authority == 'staff'">Staff</SidebarLink>
             <SidebarLink to="/dashboard" icon="bx bxs-dashboard bx-md">Dashboard</SidebarLink>
             <SidebarLink to="/profile" icon="bx bx-user bx-md">User</SidebarLink>
             <SidebarLink to="/games" icon="bx bx-play-circle bx-md">Games</SidebarLink>
