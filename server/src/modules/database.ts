@@ -27,7 +27,7 @@ export async function buildDb(){
 
             for (let i = 0; i < database_collections.length; i++) {
                 await myDB.listCollections({ name: database_collections[i] }).next(async (err: any, info: any) => {
-                    if (info) return console.log(`${database_collections[i]} exists`)
+                    if (info) return
                     await myDB.createCollection(database_collections[i])
                     console.log(`${database_collections[i]} created`)
                 })

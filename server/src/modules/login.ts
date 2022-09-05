@@ -20,6 +20,7 @@ router.post('/', async (req:any,res:any) => {
         const [email, password] :string[] = Buffer.from(b64auth, 'base64').toString().split(':')
 
         await myDb.collection('users').findOne({email: email, password: SHA256(password).toString()}).then(async (user:any) => {
+            
             if(!user){
                 db.close()
                 return res.status(401).send({error: 'Incorrect credentials'})
@@ -42,6 +43,7 @@ router.post('/', async (req:any,res:any) => {
                         last_login: user.last_login_date,
                         is_admin: user.is_admin,
                         is_staff: user.is_staff,
+                        username: user.username,
                         authority: 'admin'
                     }, process.env.SECRET_KEY, {expiresIn: '3 hours'})
                     return res.status(200).json({ access_token: `${token}` })
@@ -53,6 +55,7 @@ router.post('/', async (req:any,res:any) => {
                         last_login: user.last_login_date,
                         is_admin: user.is_admin,
                         is_staff: user.is_staff,
+                        username: user.username,
                         authority: 'staff'
                     }, process.env.SECRET_KEY, {expiresIn: '3 hours'})
                     return res.status(200).json({ access_token: `${token}` })
@@ -63,6 +66,7 @@ router.post('/', async (req:any,res:any) => {
                     last_login: user.last_login_date,
                     is_admin: user.is_admin,
                     is_staff: user.is_staff,
+                    username: user.username,
                     authority: 'user'
                 }, process.env.SECRET_KEY, {expiresIn: '3 hours'})
 

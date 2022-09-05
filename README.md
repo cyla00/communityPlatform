@@ -17,7 +17,6 @@ MONGO_DATABASE='communitydb' <br>
 MONGO_HOST='localhost' <br>
 MONGO_PORT=27017 <br>
 
-# MAILER <br>
 MAIL_PROVIDER='Mail.ru' <br>
 MAIL='' <br>
 MAIL_PASS='' <br>

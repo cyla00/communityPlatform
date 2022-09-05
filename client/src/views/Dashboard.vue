@@ -20,7 +20,6 @@ export default{
         <Nav/>
         <div :style="{'margin-left': sidebarWidth}">
 
-          <!-- contenuto pagina qui -->
           <h1>dashboard</h1>
 
         </div>

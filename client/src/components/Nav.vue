@@ -1,6 +1,8 @@
 <script>
 import {collapsed, toggleSidebar, sidebarWidth} from './state'
 import SidebarLink from './SidebarLink.vue'
+import jwt_decode from "jwt-decode"
+const { io } = require("socket.io-client")
 const axios = require('axios')
 
 export default{
@@ -15,6 +17,8 @@ export default{
         sidebarWidth,
         authority: localStorage.getItem('authority'),
         user_id: localStorage.getItem('id'),
+        username: jwt_decode(localStorage.getItem('token')).username,
+        rank: undefined,
     }
   },
   methods: {
@@ -23,8 +27,19 @@ export default{
         window.location.href = '/login'
     },
   },
-  mounted(){
-    
+  created(){
+    const socket = io('http://localhost:3000', {
+        transportOptions: {
+            polling: {
+                extraHeaders: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                },
+            },
+        },
+    })
+    socket.on('data', (data) => {
+        this.rank = data.rank
+    })
   }
 }
 </script>
@@ -33,13 +48,18 @@ export default{
 
             
     <div id="sidebar" :style="{width: sidebarWidth}">
-        <h1>
+        <div>
             <transition name="fade">
-                <span v-if="!collapsed">
-                    <span><img src="https://i.ibb.co/tb3QCbL/avatar-removebg-preview.png" alt="" width="200"></span>
-                </span>
+                <div v-if="!collapsed" id="user-id-wrapper">
+                    <div id="image-wrapper">
+                        <img src="../../public/test.jpg" alt="1080x1080 px">
+                    </div>
+                    <div id="status-wrapper"></div>
+                    <p id="username">{{username}}</p>
+                    <p id="rank"><i class='bx bxs-star bx-sm'></i>{{rank}}</p>
+                </div>
             </transition>
-        </h1>
+        </div>
         <div id="sidebar-links-wrapper">
             <SidebarLink to="/admin" icon="bx bxs-check-shield bx-md" v-if="authority == 'admin'">Admin</SidebarLink>
             <SidebarLink to="/staff" icon="bx bx-donate-heart bx-md" v-if="authority == 'staff'">Staff</SidebarLink>
@@ -66,6 +86,54 @@ export default{
     --mac-green: #00ca4e;
 }
 
+#user-id-wrapper{
+    padding: 1em;
+    height: 6em;
+}
+
+#image-wrapper{
+    margin: auto;
+    height: 120px;
+    width: 120px;
+    border-radius: 100%;
+    background: rgba(25, 53, 59, 0.5);
+    overflow: hidden;
+}
+#image-wrapper img{
+    max-width: 100%;
+    max-height: 100%;
+    background-size: contain;
+    background-position: center;
+    margin: 0;
+    padding: 0;
+}
+
+#status-wrapper{
+    position: relative;
+    margin: auto;
+    top: -20px;
+    right: -30px;
+    width: 30px;
+    height: 30px;
+    border-radius: 100%;
+    background: #00ca4e;
+}
+#username{
+    font-size: 20px;
+    margin: 0;
+}
+
+#rank{
+    margin: 0;
+    font-size: 30px;
+    margin: auto;
+}
+i{
+    color: #66ffcc;
+    margin: auto;
+}
+
+
 .fade-enter-active,
 .fade-leave-active{
     transition: opacity 0.1s;
@@ -79,7 +147,6 @@ export default{
 
 h1{
     position: absolute;
-    /* margin: auto; */
     left: 0; 
     right: 0; 
     margin-left: auto; 
@@ -102,12 +169,12 @@ h1{
 }
 
 #sidebar-links-wrapper{
-    margin: auto;
+    margin: auto 0;
 }
 
 #logout-link{
     color: #ff605c;
-    margin-top: 10em;
+    margin-top: 4em;
 }
 
 .collapsed-icon{
