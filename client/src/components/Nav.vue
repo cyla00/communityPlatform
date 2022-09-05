@@ -34,15 +34,14 @@ export default{
             }
         }
 
-        await axios.post('http://localhost:3000/api/update-user-data', {}, data).then((res) => {
-            console.log(res);
-        }).catch((err) => {
+        await axios.post('http://localhost:3000/api/update-user-data', {}, data).catch((err) => {
             console.log(err)
             return
       })
     },
   },
   created(){
+        this.getUserData()
       const socket = io('http://localhost:3000', {
             transportOptions: {
                 polling: {
@@ -53,11 +52,13 @@ export default{
             },
         })
         socket.on('connect', (data) => {
-            console.log('connected')
+            
         })
 
         socket.on('data', function(data) {
-            console.log(data)
+            data.forEach(element => {
+                console.log(element)
+            });
             socket.disconnect()
         })
   }
@@ -82,7 +83,7 @@ export default{
         </div>
         <div id="sidebar-links-wrapper">
             <SidebarLink to="/admin" icon="bx bxs-check-shield bx-md" v-if="authority == 'admin'">Admin</SidebarLink>
-            <SidebarLink @click="getUserData()" to="/staff" icon="bx bx-donate-heart bx-md" v-if="authority == 'staff'">Staff</SidebarLink>
+            <SidebarLink to="/staff" icon="bx bx-donate-heart bx-md" v-if="authority == 'staff'">Staff</SidebarLink>
             <SidebarLink to="/dashboard" icon="bx bxs-dashboard bx-md">Dashboard</SidebarLink>
             <SidebarLink to="/profile" icon="bx bx-user bx-md">User</SidebarLink>
             <SidebarLink to="/games" icon="bx bx-play-circle bx-md">Games</SidebarLink>

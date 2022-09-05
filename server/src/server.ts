@@ -3,14 +3,12 @@ const express = require('express')
 const app = express()
 const http = require('http')
 const server = http.createServer(app)
-var cors = require('cors')
+const cors = require('cors')
 const os = require('os')
 const bodyParser = require('body-parser')
-var cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser')
 const jwt = require('jsonwebtoken')
 const { Server } = require("socket.io")
-import { createClient } from 'redis'
-const redis = createClient({url: process.env.REDIS_URL})
 const io = new Server(server, {
     cors:{
         origins: ["*"]
@@ -26,7 +24,7 @@ import recover_account from './modules/recover_account'
 import renew_password from './modules/renew_password'
 import update_user_data from './modules/update_user_data'
 import { jwt_verification } from './modules/jwt_verification'
-
+import { user_data } from './modules/update_user_data'
 import { buildDb, openDbConnection } from './modules/database'
 buildDb()
 
@@ -67,21 +65,14 @@ app.use('/api/update-user-data', jwt_verification, update_user_data)
 
 io.on('connection', async (socket:any) => {
     console.log('A user connected')
-    await socket.join('data_fetch') 
+    await socket.join('data_fetch')
 
-    redis.on('error', (err:any) => console.log('Redis Client Error', err))
-    await redis.connect()
 
-    await io.sockets.in('data_fetch').emit('data', redis.get('data'))
+    await io.sockets.in('data_fetch').emit('data', user_data)
     socket.on('disconnect', () => {
         console.log('socket off')
       })
 })
-
-// io.on('connection', (socket:any) => {
-//     console.log('socket on')
-//     socket.emit('room', 'data_fetch')
-// })
 
 
 if(process.env.PROJECT_STATUS === 'production'){
