@@ -17,7 +17,7 @@ export default {
 
         <div class="system-wrapper">
             <div class="section-wrapper" id="rank-1">
-                
+  
             </div>  
 
             <div class="section-wrapper middle-card" id="rank-2">
