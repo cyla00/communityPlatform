@@ -24,12 +24,8 @@ export default {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(12.6px);
     -webkit-backdrop-filter: blur(12.6px);
-    height: 50px;
+    height: 3em;
     border-radius: 5px;
-    margin-left: 0.8em;
-    margin-right: 0.25em;
-    margin-bottom: 0.25em;
-    margin-top: 0.25em;
 }
 
 </style>

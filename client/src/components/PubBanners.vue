@@ -6,10 +6,8 @@ export default {
     props: [],
     data(){
         return{
-            // background_1: 'https://i.ibb.co/CBF2G6r/test.png',
-            // background_2: 'https://i.ibb.co/NKfV00x/test.jpg',
-            background_1: '',
-            background_2: '',
+            background_1: 'https://i.ibb.co/CBF2G6r/test.png',
+            background_2: 'https://i.ibb.co/NKfV00x/test.jpg',
         }
     },
     methods: {
@@ -64,6 +62,7 @@ export default {
     width: 750px;
     border-radius: 5px;
     margin: auto;
+    margin-top: 0.5em;
 }
 .text-wrapper{
     position: relative;

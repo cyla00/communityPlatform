@@ -43,7 +43,7 @@ export default {
         padding: 1em;
         border-radius: 0.25em;
         height: 1.5em;
-        color: #ffffff;
+        color: #F7FFFF;
         text-decoration: none;
     }
 

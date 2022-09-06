@@ -1,17 +1,24 @@
 <script>
 import {collapsed, toggleSidebar, sidebarWidth} from '../components/state'
 import SidebarLink from '../components/SidebarLink.vue'
+import SecHeader from '../components/SecHeader.vue'
+import PubBanners from '../components/PubBanners.vue'
+import TopRanking from '../components/TopRanking.vue'
+import DashMainInfo from '../components/DashMainInfo.vue'
+
 import jwt_decode from "jwt-decode"
 const { io } = require("socket.io-client")
 const axios = require('axios')
-
-import DashMainInfo from '@/components/DashMainInfo.vue'
 
 export default{
   name: 'Nav',
   emits: ['username'],
   components: {
     SidebarLink,
+    DashMainInfo,
+    SecHeader,
+    PubBanners,
+    TopRanking,
     DashMainInfo,
   },
   data(){
@@ -42,7 +49,6 @@ export default{
         }
 
         await axios.post('http://localhost:3000/api/update-user-data', {}, data).catch((err) => {
-            console.log(err)
             return
       })
     },
@@ -122,19 +128,26 @@ export default{
             <div id="sidebar-links-wrapper">
             <SidebarLink to="/admin" icon="bx bxs-check-shield bx-md" v-if="authority == 'admin'">Admin</SidebarLink>
             <SidebarLink to="/staff" icon="bx bx-donate-heart bx-md" v-if="authority == 'staff'">Staff</SidebarLink>
-            <SidebarLink to="/" icon="bx bx-home bx-md">Home</SidebarLink>
             <SidebarLink to="/profile" icon="bx bx-user bx-md">User</SidebarLink>
             <SidebarLink to="/shop" icon="bx bx-store-alt bx-md">Shop</SidebarLink>
+            <SidebarLink to="/" icon="bx bx-home bx-md">Home</SidebarLink>
             <SidebarLink to="/contact-us" icon="bx bx-help-circle bx-md">Contact</SidebarLink>
             <SidebarLink id="logout-link" to="" icon="bx bx-log-out-circle bx-md" @click="logout()">Logout</SidebarLink>
             </div>
         </div>
 
+        <div id="content-wrapper">
+            <SecHeader/>
+            <PubBanners/>
 
+            <div id="toprank-info-wrapper">
+                <DashMainInfo/>
+                <TopRanking/>
+            </div>
 
-        <button style="background: white;" @click="updateUserData">awdawdawd</button>
+        </div>
 
-
+        
 
     </div>
             
@@ -152,7 +165,21 @@ export default{
     --mac-green: #00ca4e;
     --lvl-text: #FF6FD8;
     --lvl-gradient-text-2:  #3813C2;
+    --profile-border: #ff605c;
 }
+
+#content-wrapper{
+    padding: 0.5em;
+    margin-left: 12em;
+}
+#toprank-info-wrapper{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 0.5em;
+    margin-top: 0.5em;
+}
+
+
 
 #user-id-wrapper{
     padding: 1em;
@@ -166,6 +193,7 @@ export default{
     border-radius: 100%;
     background: rgba(25, 53, 59, 0.5);
     overflow: hidden;
+    border: solid 3px #00ca4e;
 }
 #image-wrapper img{
     max-width: 100%;
@@ -187,14 +215,6 @@ export default{
     margin: auto;
     color: #FF6FD8;
 }
-
-
-
-
-
-
-
-
 .bxs-star{
     color: #66ffcc !important;
     margin: auto;
@@ -209,10 +229,9 @@ h1{
 }
 
 #sidebar{
-    background-color: #26374B;
+    background-color: #1F2133;
     float: left;
     position: fixed;
-    z-index: 1;
     top: 0;
     left: 0;
     bottom: 0;
@@ -228,7 +247,7 @@ h1{
 
 #logout-link{
     color: #ff605c;
-    margin-top: 4em;
+    margin-top: 5em;
 }
 
 .collapsed-icon{
