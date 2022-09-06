@@ -2,11 +2,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Home from '../views/Home.vue'
 import Login from '@/views/Login.vue'
 import Register from '@/views/Register.vue'
-import Dashboard from '@/views/Dashboard.vue'
 import Profile from '@/views/Profile.vue'
-import Games from '@/views/Games.vue'
-import Bank from '@/views/Bank.vue'
-import Shop from '@/views/Shop.vue'
 import SalesTerms from '@/views/SalesTerms.vue'
 import PrivacyPolicy from '@/views/PrivacyPolicy.vue'
 import ContactUs from '@/views/ContactUs.vue'
@@ -16,6 +12,8 @@ import Err404 from '@/views/Err404.vue'
 import Resetpass from '@/views/reset_pass.vue'
 import Admin from '@/views/Admin.vue'
 import Staff from '@/views/Staff.vue'
+import Nav from '@/views/Nav.vue'
+import Shop from '@/views/Shop.vue'
 import jwt_decode from "jwt-decode"
 const axios = require('axios')
 
@@ -69,11 +67,11 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/dashboard',
-    name: 'Dashboard',
+    name: 'Nav',
     meta: {
       public: false,
     },
-    component: Dashboard,
+    component: Nav,
   },
   {
     path: '/admin',
@@ -95,22 +93,6 @@ const routes: Array<RouteRecordRaw> = [
     path: '/profile',
     name: 'Profile',
     component: Profile,
-    meta: {
-      public: false,
-    },
-  },
-  {
-    path: '/games',
-    name: 'Games',
-    component: Games,
-    meta: {
-      public: false,
-    },
-  },
-  {
-    path: '/bank',
-    name: 'Bank',
-    component: Bank,
     meta: {
       public: false,
     },

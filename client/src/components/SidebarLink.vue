@@ -1,7 +1,6 @@
 <script>
 import {computed} from 'vue'
 import {useRoute} from 'vue-router'
-import {collapsed} from './state'
 
 export default {
     props: {
@@ -13,7 +12,6 @@ export default {
         const isActive = computed(() => route.path === props.to)
         return {
             isActive,
-            collapsed,
         }
     }
 }
@@ -22,23 +20,16 @@ export default {
 <template>
     <router-link :to="to" class="link" :class="{active: isActive}">
         <i class="icon" :class="icon"/>
-        <transition name="fade">
-        <span v-if="!collapsed">
+        <span>
             <slot/>
         </span>
-        </transition>
     </router-link>
 </template>
 
 <style>
-    .fade-enter-active,
-    .fade-leave-active{
-        transition: opacity 0.1s;
-    }
 
-    .fade-enter,
-    .fade-leave-to{
-        opacity: 0;
+    :root{
+        --btn-hover-bg: rgba(36, 81, 100, 0.5);
     }
 
     .link{
@@ -57,12 +48,12 @@ export default {
     }
 
     .link:hover{
-        background-color: rgba(77, 77, 209, 0.5);
+        background-color: var(--btn-hover-bg);
         border-radius: 20px;
     }
 
     .link:active{
-        background-color: rgba(77, 77, 209, 0.5);
+        background-color: rgba(38, 193, 202, 0.5);
         border-radius: 20px;
     }
 

@@ -64,7 +64,8 @@ app.use('/api/update-user-data', jwt_verification, update_user_data)
 
 
 io.on('connection', async (socket:any) => {
-
+    console.log('on');
+    
     await socket.join('data_fetch')
     await io.sockets.in('data_fetch').emit('data', user_data)
 })

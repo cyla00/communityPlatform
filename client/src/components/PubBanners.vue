@@ -6,8 +6,10 @@ export default {
     props: [],
     data(){
         return{
-            background_1: 'https://i.ibb.co/CBF2G6r/test.png',
-            background_2: 'https://i.ibb.co/NKfV00x/test.jpg',
+            // background_1: 'https://i.ibb.co/CBF2G6r/test.png',
+            // background_2: 'https://i.ibb.co/NKfV00x/test.jpg',
+            background_1: '',
+            background_2: '',
         }
     },
     methods: {
@@ -24,7 +26,7 @@ export default {
         <div class="blank">
             <div :style="{ '--bgImage1': `url(${background_1})` }" class="image-wrapper" id="bg-1"> 
                 <div class="text-wrapper">
-                    <p>promote your community or channel here!</p>
+                    <p>Promote your community or channel here!</p>
                     <p>5:1 ratio</p>
                 </div>
             </div>
@@ -33,7 +35,7 @@ export default {
         <div class="blank">
             <div :style="{ '--bgImage2': `url(${background_2})` }" class="image-wrapper" id="bg-2">
                 <div class="text-wrapper">
-                    <p>promote your community or channel here!</p>
+                    <p>Promote your community or channel here!</p>
                     <p>5:1 ratio</p>
                 </div>
             </div>

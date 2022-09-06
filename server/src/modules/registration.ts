@@ -12,6 +12,7 @@ router.post('/', (req:any,res:any) => {
     
     interface user_data {
         id: String,
+        add_friend_code: String,
         email: String,
         username: String,
         avatar: String,
@@ -111,6 +112,7 @@ router.post('/', (req:any,res:any) => {
                     const hashed_key = SHA256(key).toString()
                     let user_object :user_data = {
                         id: uuidv4(),
+                        add_friend_code: uuidv4(),
                         email: req.body.email, 
                         username: req.body.username,
                         avatar: './avatars/default_avatar.png',
