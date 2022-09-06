@@ -12,7 +12,6 @@ const axios = require('axios')
 
 export default{
   name: 'Nav',
-  emits: ['username'],
   components: {
     SidebarLink,
     DashMainInfo,
@@ -32,7 +31,8 @@ export default{
         username: undefined,
         rank: undefined,
         user_avatar: 'https://i.ibb.co/GQ8X5g9/img.jpg',
-        
+        balance: undefined,
+        referral_link: '',
     }
   },
   methods: {
@@ -75,6 +75,8 @@ export default{
             let context_user = array.find(element => element.id === localStorage.getItem('id'))
             this.username = context_user.username
             this.rank = context_user.user_rank
+            this.balance = context_user.user_token_balance
+            this.referral_link = context_user.user_referral_link
         })
     }
   },
@@ -108,6 +110,8 @@ export default{
             let context_user = array.find(element => element.id === localStorage.getItem('id'))
             this.username = context_user.username
             this.rank = context_user.user_rank
+            this.balance = context_user.user_token_balance
+            this.referral_link = context_user.user_referral_link
         })
   }
 }
@@ -141,7 +145,7 @@ export default{
             <PubBanners/>
 
             <div id="toprank-info-wrapper">
-                <DashMainInfo/>
+                <DashMainInfo :balance="balance" :referral_link="referral_link"/>
                 <TopRanking/>
             </div>
 

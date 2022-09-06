@@ -3,11 +3,11 @@ const axios = require('axios')
 
 export default {
     name: 'TopRanking',
-    props: [],
+    props: ['balance', 'referral_link'],
     data(){
         return{
-            referral_link: 'http://hardergamers.com/register/idofplayer/awdadawdadadadawdawdawdawdawdadadadadwad',
-            balance: 0,
+            // referral_link: 'http://hardergamers.com/register/idofplayer/awdadawdadadadawdawdawdawdawdadadadadwad',
+            // balance: 0,
             balance_hidden: false,
         }
     },
@@ -79,7 +79,7 @@ p{
 }
 .link-text{
     color: #d9d9d9;
-    padding: 0.2em;
+    padding: 0.5em;
     background: rgba(49, 62, 70, 0.3);
     border-radius: 5px;
     text-align: center;
