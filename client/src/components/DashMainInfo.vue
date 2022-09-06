@@ -33,7 +33,7 @@ export default {
             <div class="text-wrapper">
                 <p>Your current balance</p>
                 <div id="balance">
-                    <p class="link-text" id="balance-number"><span id="token">Token:</span> <span :class="{'hidden': balance_hidden}">{{balance}}</span></p>
+                    <p class="link-text" id="balance-number"><span id="token"><i class='bx bxs-coin-stack'></i></span> <span :class="{'hidden': balance_hidden}">{{balance}}</span></p>
                     <button @click="hideBalance"><i class='bx bx-hide bx-md'></i></button>
                 </div>
             </div>
@@ -92,7 +92,7 @@ p{
     margin: auto;
 }
 #token{
-    color: #82C72C;
+    color: #889b73;
 }
 #balance-number{
     padding: 0.5em;
