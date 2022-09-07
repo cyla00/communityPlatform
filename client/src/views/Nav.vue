@@ -141,6 +141,7 @@ export default{
         </div>
 
         <div id="content-wrapper">
+            <button @click="updateUserData()">wdwdwdwd</button>
             <SecHeader/>
             <PubBanners/>
 
