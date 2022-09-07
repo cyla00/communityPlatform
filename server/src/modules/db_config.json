@@ -2,10 +2,7 @@
     "db_collection_list": [
         "users",
         "games",
-        "advertising_banner1",
-        "advertising_banner2",
-        "advertising_banner3",
-        "advertising_banner4",
+        "advertisings",
         "platform_view_method",
         "communities",
         "partners",

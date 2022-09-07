@@ -24,11 +24,10 @@ import recover_account from './modules/recover_account'
 import renew_password from './modules/renew_password'
 import update_user_data from './modules/update_user_data'
 import { jwt_verification } from './modules/jwt_verification'
-import { user_data } from './modules/update_user_data'
+import { bulk_data } from './modules/update_user_data'
 import { buildDb, openDbConnection } from './modules/database'
+import { isBigIntLiteral } from 'typescript'
 buildDb()
-
-
 // MIDDLEWARES EXPRESS
 app.use(cors())
 app.use(express.json())
@@ -64,10 +63,8 @@ app.use('/api/update-user-data', jwt_verification, update_user_data)
 
 
 io.on('connection', async (socket:any) => {
-    console.log('on');
-    
     await socket.join('data_fetch')
-    await io.sockets.in('data_fetch').emit('data', user_data)
+    await io.sockets.in('data_fetch').emit('data', bulk_data)
 })
 
 

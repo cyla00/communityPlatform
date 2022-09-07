@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Home from '../views/Home.vue'
 import Login from '@/views/Login.vue'
 import Register from '@/views/Register.vue'
+import Referral from '@/views/Referral.vue'
 import Profile from '@/views/Profile.vue'
 import SalesTerms from '@/views/SalesTerms.vue'
 import PrivacyPolicy from '@/views/PrivacyPolicy.vue'
@@ -31,6 +32,17 @@ const routes: Array<RouteRecordRaw> = [
     path: '/registration',
     name: 'Register',
     component: Register,
+    meta: {
+      public: true,
+    },
+    beforeEnter(to, from, next){
+      return tokenCheck(next)
+    }
+  },
+  {
+    path: '/referral/:id',
+    name: 'Referral',
+    component: Referral,
     meta: {
       public: true,
     },

@@ -48,7 +48,7 @@ export default {
     }
 
     .link:hover{
-        background-color: var(--btn-hover-bg);
+        background-color: rgba(36, 81, 100, 0.5);
         border-radius: 20px;
     }
 

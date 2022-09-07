@@ -6,14 +6,20 @@ export default {
     props: ['balance', 'referral_link'],
     data(){
         return{
-            // referral_link: 'http://hardergamers.com/register/idofplayer/awdadawdadadadawdawdawdawdawdadadadadwad',
-            // balance: 0,
-            balance_hidden: false,
+            balance_hidden: true,
+            copied: false,
         }
     },
     methods: {
         hideBalance(){
             this.balance_hidden = !this.balance_hidden
+        },
+        async copy(){
+            await navigator.clipboard.writeText(this.$props.referral_link)
+            this.copied = true
+            setTimeout(() => {
+                this.copied = false
+            }, 1000)
         }
     }
 }
@@ -22,16 +28,24 @@ export default {
 <template>
     <div id="wrapper">
 
+        <Teleport to="body">
+            <Transition>
+            <div id="modal" v-if="copied">
+                <p>Link Copied</p>
+            </div>
+            </Transition>
+        </Teleport>
+
         <div class="system-wrapper">
             <div class="text-wrapper">
-                <p>Your referral link</p>
-                <p class="link-text">{{referral_link}}</p>
+                <p class="title">Your referral link</p>
+                <button id="link-copy" @click="copy()"><i class='bx bx-copy-alt bx-sm'></i>copy link</button>
             </div>
         </div>
 
         <div class="system-wrapper">
             <div class="text-wrapper">
-                <p>Your current balance</p>
+                <p class="title">Your current balance</p>
                 <div id="balance">
                     <p class="link-text" id="balance-number"><span id="token"><i class='bx bxs-coin-stack'></i></span> <span :class="{'hidden': balance_hidden}">{{balance}}</span></p>
                     <button @click="hideBalance"><i class='bx bx-hide bx-md'></i></button>
@@ -40,21 +54,68 @@ export default {
         </div>
 
         <div class="system-wrapper">
-            
-        </div>
 
-        
+        </div>
 
     </div>
 </template>
 
 <style scoped>
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.8s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+
+#modal{
+    position: absolute;
+    z-index: 3;
+    top: 0;
+    left: 50%;
+    background: #d9d9d9;
+    color: #F40552;
+    color: black;
+    font-family: Poppins;
+    font-weight: bold;
+    padding: 0.5em;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+#link-copy{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    background: rgba(49, 62, 70, 0.3);
+    padding: 0.5em;
+    border-radius: 5px;
+    color: #d9d9d9;
+    text-transform: capitalize;
+    font-family: Poppins;
+}
+#link-copy:hover{
+    background-color: rgba(36, 81, 100, 0.5);
+}
+#link-copy:active{
+    background-color: rgba(38, 193, 202, 0.5)
+}
+.bx-copy-alt{
+    margin-right: 0.5em;
+    color: #26c1ca;
+}
+
 #wrapper{
     display: grid;
     grid-template-rows: 1fr 1fr 1fr;
     grid-gap: 0.5em;
     height: 100%;
 }
+
 
 .system-wrapper{
     background: rgba(49, 62, 70, 0.3);
@@ -84,6 +145,11 @@ p{
     border-radius: 5px;
     text-align: center;
     margin: 0;
+    height: 20px;
+    overflow: hidden !important;
+}
+.title{
+    font-size: 0.9em;
 }
 #balance{
     display: flex;

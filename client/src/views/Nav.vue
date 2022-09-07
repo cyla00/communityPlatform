@@ -5,6 +5,8 @@ import SecHeader from '../components/SecHeader.vue'
 import PubBanners from '../components/PubBanners.vue'
 import TopRanking from '../components/TopRanking.vue'
 import DashMainInfo from '../components/DashMainInfo.vue'
+import Games from '../components/Games.vue'
+import Friends from '../components/Friends.vue'
 
 import jwt_decode from "jwt-decode"
 const { io } = require("socket.io-client")
@@ -19,6 +21,8 @@ export default{
     PubBanners,
     TopRanking,
     DashMainInfo,
+    Games,
+    Friends,
   },
   data(){
     return{
@@ -28,11 +32,15 @@ export default{
         is_online: false,
         authority: localStorage.getItem('authority'),
         user_id: localStorage.getItem('id'),
-        username: undefined,
-        rank: undefined,
-        user_avatar: 'https://i.ibb.co/GQ8X5g9/img.jpg',
-        balance: undefined,
+        username: '',
+        rank: 0,
+        user_avatar: '',
+        balance: 0,
         referral_link: '',
+        users: [],
+        games: [],
+        advertisings: [],
+        events: [],
     }
   },
   methods: {
@@ -52,35 +60,9 @@ export default{
             return
       })
     },
-    async updateUserData(){
-        await this.getUserData()
-        const socket = io('http://localhost:3000', {
-            transportOptions: {
-                polling: {
-                    extraHeaders: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                    },
-                },
-            },
-        })
-        
-        socket.on('data', async (data) => {
+    async updateData(){
+    await this.getUserData()
 
-            let array = []
-
-            await data.forEach(element => {
-                array.push(element)
-            })
-
-            let context_user = array.find(element => element.id === localStorage.getItem('id'))
-            this.username = context_user.username
-            this.rank = context_user.user_rank
-            this.balance = context_user.user_token_balance
-            this.referral_link = context_user.user_referral_link
-        })
-    }
-  },
-  async created(){
         const socket = io('http://localhost:3000', {
             transportOptions: {
                 polling: {
@@ -100,18 +82,53 @@ export default{
         })
 
         socket.on('data', async (data) => {
-            await this.getUserData()
-            let array = []
+            this.users.splice(0, this.users.length, ...data.users)
+            this.games.splice(0, this.games.length, ...data.games)
+            this.advertisings.splice(0, this.advertisings.length, ...data.advertisings)
+            this.events.splice(0, this.events.length, ...data.events)
 
-            await data.forEach(element => {
-                array.push(element)
-            })
-
-            let context_user = array.find(element => element.id === localStorage.getItem('id'))
+            let context_user = this.users.find(element => element.id === localStorage.getItem('id'))
             this.username = context_user.username
             this.rank = context_user.user_rank
-            this.balance = context_user.user_token_balance
+            this.balance = context_user.balance
             this.referral_link = context_user.user_referral_link
+            this.user_avatar = context_user.avatar
+        })
+    },
+  },
+  async created(){
+        await this.getUserData()
+
+        const socket = io('http://localhost:3000', {
+            transportOptions: {
+                polling: {
+                    extraHeaders: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    },
+                },
+            },
+        })
+            
+        socket.on('connect', async () => {
+            this.is_online = true
+        })
+
+        socket.on('disconnect', () => {
+            this.is_online = false
+        })
+
+        socket.on('data', async (data) => {
+            this.users.splice(0, this.users.length, ...data.users)
+            this.games.splice(0, this.games.length, ...data.games)
+            this.advertisings.splice(0, this.advertisings.length, ...data.advertisings)
+            this.events.splice(0, this.events.length, ...data.events)
+
+            let context_user = this.users.find(element => element.id === localStorage.getItem('id'))
+            this.username = context_user.username
+            this.rank = context_user.user_rank
+            this.balance = context_user.balance
+            this.referral_link = context_user.user_referral_link
+            this.user_avatar = context_user.avatar
         })
   }
 }
@@ -140,14 +157,20 @@ export default{
             </div>
         </div>
 
+        <button @click="updateData()">awdawdawdaw</button>
+
         <div id="content-wrapper">
-            <button @click="updateUserData()">wdwdwdwd</button>
             <SecHeader/>
             <PubBanners/>
 
-            <div id="toprank-info-wrapper">
+            <div class="info-wrapper">
                 <DashMainInfo :balance="balance" :referral_link="referral_link"/>
                 <TopRanking/>
+            </div>
+
+            <div class="game-wrapper">
+                <Games/>
+                <Friends/>
             </div>
 
         </div>
@@ -177,9 +200,16 @@ export default{
     padding: 0.5em;
     margin-left: 12em;
 }
-#toprank-info-wrapper{
+.info-wrapper{
     display: grid;
     grid-template-columns: 1fr 1fr;
+    column-gap: 0.5em;
+    margin-top: 0.5em;
+}
+
+.game-wrapper{
+    display: grid;
+    grid-template-rows: 1fr 1fr;
     column-gap: 0.5em;
     margin-top: 0.5em;
 }
@@ -210,8 +240,10 @@ export default{
 }
 
 #username{
-    font-size: 20px;
+    text-align: center;
+    font-size: 17px;
     margin-inline: 0;
+    overflow: hidden;
 }
 
 #rank{
@@ -234,6 +266,7 @@ h1{
 }
 
 #sidebar{
+    width: 11em;
     background-color: #1F2133;
     float: left;
     position: fixed;

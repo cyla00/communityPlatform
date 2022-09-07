@@ -2,13 +2,27 @@ const express = require('express')
 const router = express.Router()
 const NodeCache = require( "node-cache" )
 const myCache = new NodeCache()
-
 import { openDbConnection } from './database'
 const client = openDbConnection()
 
-export let user_data:any
+export let bulk_data:any
+let eventsData :Array<Object> = []
+let userData :Array<Object> = []
+let gamesData :Array<Object> = []
+let promotionalBanners :Array<Object> = []
 
-router.post('/', async (req:any,res:any) => { 
+
+let fullData = {
+    users: userData,
+    games: gamesData,
+    advertisings: promotionalBanners,
+    events: eventsData,
+}
+
+
+
+router.post('/', async (req:any,res:any) => {
+
     await client.connect(async (err:any, db:any) => {
         if(err){
             db.close()
@@ -16,46 +30,66 @@ router.post('/', async (req:any,res:any) => {
         }
 
         const myDb = db.db(process.env.MONGO_DATABASE)
-
-        await myDb.collection('users').find({}).toArray(async (err:any, data:any) => {
+        
+        myDb.collection('users').find({}).toArray(async (err:any, users:any) => {
             if(err) {
                 db.close()
                 return console.log(err)
-            }   
-            
-            if(!data){
-                db.close()
-                return res.sendStatus(401)
             }
 
-            const userData :Array<Object> = []
-
-            data.forEach((element:any) => {
-                userData.push({
+            const array :Array<Object> = []
+            users.forEach((element:any) => {
+                array.push({
                     id: element.id,
                     email: element.email,
                     username: element.username,
+                    user_rank: element.user_rank,
+                    balance: element.user_token_balance,
                     avatar: element.avatar,
                     profile_banner: element.profile_banner,
-                    birth_date: element.birth_date,
-                    user_description: element.user_description,
-                    country_flag: element.country_flag,
-                    user_games: element.user_games,
-                    user_rank: element.user_rank,
-                    user_token_balance: element.user_token_balance,
                     user_referral_link: element.user_referral_link,
-                    user_referral_count: element.user_referral_count,
-                    last_login_date: element.last_login_date,
-                    friends_list: element.friends_list,
+                    add_friend_code: element.add_friend_code,
                 })
             })
 
-            myCache.set( "data", userData)
-            user_data = myCache.take('data')
-            
-            return res.sendStatus(200)  
+            userData.splice(0, userData.length, ...array)
         })
+        
+        
+        myDb.collection('games').find({}).toArray(async (err:any, games:any) => {
+            if(err) {
+                db.close()
+                return console.log(err)
+            }
+            gamesData.splice(0, gamesData.length, ...games)    
+        })
+
+
+        myDb.collection('advertisings').find({}).toArray(async (err:any, advertisings:any) => {
+            if(err) {
+                db.close()
+                return console.log(err)
+            }       
+            promotionalBanners.splice(0, promotionalBanners.length, ...advertisings)
+        })
+
+
+        myDb.collection('events').find({}).toArray(async (err:any, events:any) => {    
+            if(err) {
+                db.close()
+                return console.log(err)
+            } 
+            eventsData.splice(0, eventsData.length, ...events)
+        })
+
+
+        
+
     })
+
+    bulk_data = myCache.take('data')
+    myCache.set( "data", fullData)
+    return res.sendStatus(200)
 })
 
 export default router

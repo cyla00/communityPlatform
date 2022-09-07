@@ -5,7 +5,7 @@ const axios = require('axios').default
 
 
 export default{
-  name: 'Register',
+  name: 'Referral',
   components: {
     Footer,
   },
@@ -25,6 +25,7 @@ export default{
       error_message: '',
       success_message: '',
       loading_message: '',
+      balance: 10,
     }
   },
   methods:{
@@ -65,6 +66,7 @@ export default{
         birth_date: this.birth_date,
         country: this.country,
         how_found_us: this.viewMethod,
+        balance: this.balance,
       }
 
     
@@ -75,6 +77,9 @@ export default{
           this.success_message = 'Registration successful, copy your key!'
           this.secureCode = res.data.security_key
           this.form_correct = true
+
+        // Update the user who gave the referral link
+
         }
       }).catch((err) => {
         return this.error_message = err.response.data.error
