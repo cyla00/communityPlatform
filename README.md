@@ -8,7 +8,6 @@ PROJECT_STATUS='development' # production <br>
 
 PLATFORM_NAME=HarderGamers <br>
 SECRET_KEY='' jwt<br>
-REFRESH_KEY='' jwt<br>
 
 SERVER_PORT=3000 <br>
 MONGO_USER='' <br>
@@ -25,7 +24,7 @@ WEBSITE_HOST='http://localhost:3000/' <br>
 
 # NPMs
 
-body-parser, cookie-parser, cors, crypto-js, dotenv, express, jsonwebtoken, mongodb, nodemailer, nodemon, ts-node, typescript, uuid <br>
+body-parser, cookie-parser, cors, crypto-js, dotenv, express, jsonwebtoken, mongodb, nodemailer, nodemon, ts-node, typescript, uuid, node-cache<br>
 
 ### step 1:<br>
 download mongodb.<br>
@@ -41,7 +40,6 @@ create 'dbOwner' user on 'use_database'.<br>
 
 ### step 5:<br>
 enable mongodb Auth from config file.<br>
-
 
 ### platform production setup<br>
 
