@@ -29,7 +29,6 @@ export default{
         collapsed,
         toggleSidebar,
         sidebarWidth,
-        is_online: false,
         authority: localStorage.getItem('authority'),
         user_id: localStorage.getItem('id'),
         username: '',
@@ -60,32 +59,13 @@ export default{
             return
       })
     },
-    async updateData(){
-    await this.getUserData()
+    async update(){
+        var socket = io('http://localhost:3000', {transports: ['websocket']})
+        
 
-        const socket = io('http://localhost:3000', {
-            transportOptions: {
-                polling: {
-                    extraHeaders: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                    },
-                },
-            },
-        })
-            
-        socket.on('connect', async () => {
-            this.is_online = true
-        })
-
-        socket.on('disconnect', () => {
-            this.is_online = false
-        })
-
-        socket.on('data', async (data) => {
-            this.users.splice(0, this.users.length, ...data.users)
-            this.games.splice(0, this.games.length, ...data.games)
-            this.advertisings.splice(0, this.advertisings.length, ...data.advertisings)
-            this.events.splice(0, this.events.length, ...data.events)
+        socket.on('user_data', async (data) => {
+            await this.getUserData()
+            this.users.splice(0, this.users.length, ...data)
 
             let context_user = this.users.find(element => element.id === localStorage.getItem('id'))
             this.username = context_user.username
@@ -94,34 +74,14 @@ export default{
             this.referral_link = context_user.user_referral_link
             this.user_avatar = context_user.avatar
         })
-    },
+    }
   },
   async created(){
-        await this.getUserData()
-
-        const socket = io('http://localhost:3000', {
-            transportOptions: {
-                polling: {
-                    extraHeaders: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                    },
-                },
-            },
-        })
-            
-        socket.on('connect', async () => {
-            this.is_online = true
-        })
-
-        socket.on('disconnect', () => {
-            this.is_online = false
-        })
-
-        socket.on('data', async (data) => {
-            this.users.splice(0, this.users.length, ...data.users)
-            this.games.splice(0, this.games.length, ...data.games)
-            this.advertisings.splice(0, this.advertisings.length, ...data.advertisings)
-            this.events.splice(0, this.events.length, ...data.events)
+    const socket = io('http://localhost:3000', {transports: ['websocket'], upgrade: false})
+    await this.getUserData()          
+        socket.on('user_data', async (data) => {
+            await this.getUserData()
+            this.users.splice(0, this.users.length, ...data)
 
             let context_user = this.users.find(element => element.id === localStorage.getItem('id'))
             this.username = context_user.username
@@ -156,9 +116,7 @@ export default{
             <SidebarLink id="logout-link" to="" icon="bx bx-log-out-circle bx-md" @click="logout()">Logout</SidebarLink>
             </div>
         </div>
-
-        <button @click="updateData()">awdawdawdaw</button>
-
+        <button @click="update()">wawdawd</button>
         <div id="content-wrapper">
             <SecHeader/>
             <PubBanners/>

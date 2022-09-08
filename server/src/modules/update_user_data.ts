@@ -5,25 +5,12 @@ const myCache = new NodeCache()
 import { openDbConnection } from './database'
 const client = openDbConnection()
 
-export let bulk_data:any
-let eventsData :Array<Object> = []
+export let users:any
 let userData :Array<Object> = []
-let gamesData :Array<Object> = []
-let promotionalBanners :Array<Object> = []
-
-
-let fullData = {
-    users: userData,
-    games: gamesData,
-    advertisings: promotionalBanners,
-    events: eventsData,
-}
-
-
 
 router.post('/', async (req:any,res:any) => {
 
-    await client.connect(async (err:any, db:any) => {
+    await client.connect(async(err:any, db:any) => {
         if(err){
             db.close()
             return res.sendStatus(500)
@@ -31,12 +18,12 @@ router.post('/', async (req:any,res:any) => {
 
         const myDb = db.db(process.env.MONGO_DATABASE)
         
-        myDb.collection('users').find({}).toArray(async (err:any, users:any) => {
+        await myDb.collection('users').find({}).toArray(async (err:any, users:any) => {
+            
             if(err) {
                 db.close()
                 return console.log(err)
             }
-
             const array :Array<Object> = []
             users.forEach((element:any) => {
                 array.push({
@@ -54,41 +41,10 @@ router.post('/', async (req:any,res:any) => {
 
             userData.splice(0, userData.length, ...array)
         })
-        
-        
-        myDb.collection('games').find({}).toArray(async (err:any, games:any) => {
-            if(err) {
-                db.close()
-                return console.log(err)
-            }
-            gamesData.splice(0, gamesData.length, ...games)    
-        })
-
-
-        myDb.collection('advertisings').find({}).toArray(async (err:any, advertisings:any) => {
-            if(err) {
-                db.close()
-                return console.log(err)
-            }       
-            promotionalBanners.splice(0, promotionalBanners.length, ...advertisings)
-        })
-
-
-        myDb.collection('events').find({}).toArray(async (err:any, events:any) => {    
-            if(err) {
-                db.close()
-                return console.log(err)
-            } 
-            eventsData.splice(0, eventsData.length, ...events)
-        })
-
-
-        
-
     })
 
-    bulk_data = myCache.take('data')
-    myCache.set( "data", fullData)
+    users = myCache.take('data')
+    myCache.set( "data", userData)
     return res.sendStatus(200)
 })
 

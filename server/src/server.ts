@@ -22,9 +22,21 @@ import token  from './modules/token'
 import email_verification  from './modules/email_verification'
 import recover_account from './modules/recover_account'
 import renew_password from './modules/renew_password'
-import update_user_data from './modules/update_user_data'
+
 import { jwt_verification } from './modules/jwt_verification'
-import { bulk_data } from './modules/update_user_data'
+
+import update_user_data from './modules/update_user_data'
+import { users } from './modules/update_user_data'
+
+import update_games_data from './modules/update_games_data'
+import { gamesData } from './modules/update_games_data'
+
+import advertisements_data from './modules/advertisements_data'
+import { advertisements } from './modules/advertisements_data'
+
+import events_data from './modules/events_data'
+import { eventsData } from './modules/events_data'
+
 import { buildDb, openDbConnection } from './modules/database'
 import { isBigIntLiteral } from 'typescript'
 buildDb()
@@ -35,20 +47,20 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cookieParser())
 
 // MIDDLEWARES SOCKET.IO
-io.use((socket:any, next:any) => {
-    const header = socket.handshake.headers['authorization']
-    const token = header.split(' ')[1]
-    if(token == null)return next(new Error('authentication error'))
+// io.use((socket:any, next:any) => {
+//     const header = socket.handshake.headers['authorization']
+//     const token = header.split(' ')[1]
+//     if(token == null)return next(new Error('authentication error'))
 
-    jwt.verify(token, process.env.SECRET_KEY, (err:any, user:any) => {
-        if(err) return next(new Error('authentication error'))
-        if(user.authority == 'admin' && !user.is_admin) return next(new Error('authentication error'))
-        if(user.authority == 'staff' && !user.is_staff) return next(new Error('authentication error'))
-        if(user.authority == 'users' && user.is_staff) return next(new Error('authentication error'))
-        if(user.authority == 'users' && user.is_admin) return next(new Error('authentication error'))
-        next()
-    })
-})
+//     jwt.verify(token, process.env.SECRET_KEY, (err:any, user:any) => {
+//         if(err) return next(new Error('authentication error'))
+//         if(user.authority == 'admin' && !user.is_admin) return next(new Error('authentication error'))
+//         if(user.authority == 'staff' && !user.is_staff) return next(new Error('authentication error'))
+//         if(user.authority == 'users' && user.is_staff) return next(new Error('authentication error'))
+//         if(user.authority == 'users' && user.is_admin) return next(new Error('authentication error'))
+//         next()
+//     })
+// })
 
 
 // ROUTES
@@ -59,12 +71,24 @@ app.use('/api/token', jwt_verification, token)
 app.use('/api/recover-account', recover_account)
 app.use('/api/set-pass', renew_password)
 app.use('/api/update-user-data', jwt_verification, update_user_data)
+app.use('/api/update-games-data', jwt_verification, update_games_data)
+app.use('/api/advertisements_data', jwt_verification, advertisements_data)
+app.use('/api/events_data', jwt_verification, events_data)
 
 
 
-io.on('connection', async (socket:any) => {
-    await socket.join('data_fetch')
-    await io.sockets.in('data_fetch').emit('data', bulk_data)
+io.on('connection', (socket:any) => {
+    socket.join('data_fetch')
+    io.sockets.in('data_fetch').emit('user_data', users)
+
+    socket.join('games_fetch')
+    io.sockets.in('games_fetch').emit('games_data', gamesData)
+
+    socket.join('advertisements_fetch')
+    io.sockets.in('advertisements_fetch').emit('advertisement_data', advertisements)
+
+    socket.join('events_fetch')
+    io.sockets.in('events_fetch').emit('events_data', eventsData)
 })
 
 
