@@ -1,21 +1,52 @@
 <script>
+const { io } = require("socket.io-client")
 const axios = require('axios')
 
 export default {
     name: 'PubBanners',
-    props: [],
     data(){
         return{
-            background_1: 'https://i.ibb.co/CBF2G6r/test.png',
-            background_2: 'https://i.ibb.co/NKfV00x/test.jpg',
+            item1: '',
+            item2: '',
+            background_1: '',
+            background_2: '',
+            timer: null,
         }
     },
     methods: {
+    async getBanners(){
 
+        const data = {
+            headers: {
+                authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        }
+
+        await axios.post('http://localhost:3000/api/advertisements_data', {}, data).catch((err) => {
+            return
+      })
     },
-    created(){
-        
-    }
+  },
+  async mounted(){
+    const socket = io('http://localhost:3000', {transports: ['websocket'], upgrade: false})
+        await this.getBanners()
+         socket.on('advertisement_data', async (data) => {
+            if(!data) {
+                this.background_1 = ''
+                this.background_2 = ''
+            }
+            this.item1 = data[Math.floor(Math.random()*data.length)]
+            this.item2 = data[Math.floor(Math.random()*data.length)]
+            this.background_1 = this.item1.image
+            this.background_2 = this.item2.image
+            setInterval(() => {
+                this.item1 = data[Math.floor(Math.random()*data.length)]
+                this.item2 = data[Math.floor(Math.random()*data.length)]
+                this.background_1 = this.item1.image
+                this.background_2 = this.item2.image
+            }, 4000)
+        })  
+    },
 }
 </script>
 
@@ -25,7 +56,7 @@ export default {
             <div :style="{ '--bgImage1': `url(${background_1})` }" class="image-wrapper" id="bg-1"> 
                 <div class="text-wrapper">
                     <p>Promote your community or channel here!</p>
-                    <p>5:1 ratio</p>
+                    <p>5:1 ratio 4sec gif</p>
                 </div>
             </div>
         </div>
@@ -34,7 +65,7 @@ export default {
             <div :style="{ '--bgImage2': `url(${background_2})` }" class="image-wrapper" id="bg-2">
                 <div class="text-wrapper">
                     <p>Promote your community or channel here!</p>
-                    <p>5:1 ratio</p>
+                    <p>5:1 ratio 4sec gif</p>
                 </div>
             </div>
         </div>
@@ -45,6 +76,16 @@ export default {
 :root{
     --bgImage1: '';
     --bgImage2: '';
+}
+
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
 }
 
 #wrapper{

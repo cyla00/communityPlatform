@@ -60,7 +60,7 @@ export default{
       })
     },
     async update(){
-        var socket = io('http://localhost:3000', {transports: ['websocket']})
+        const socket = io('http://localhost:3000', {transports: ['websocket'], upgrade: false})
         
 
         socket.on('user_data', async (data) => {
@@ -80,7 +80,6 @@ export default{
     const socket = io('http://localhost:3000', {transports: ['websocket'], upgrade: false})
     await this.getUserData()          
         socket.on('user_data', async (data) => {
-            await this.getUserData()
             this.users.splice(0, this.users.length, ...data)
 
             let context_user = this.users.find(element => element.id === localStorage.getItem('id'))
@@ -116,7 +115,6 @@ export default{
             <SidebarLink id="logout-link" to="" icon="bx bx-log-out-circle bx-md" @click="logout()">Logout</SidebarLink>
             </div>
         </div>
-        <button @click="update()">wawdawd</button>
         <div id="content-wrapper">
             <SecHeader/>
             <PubBanners/>
