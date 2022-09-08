@@ -2,10 +2,10 @@
 const axios = require('axios')
 
 export default {
-    name: 'Games',
+    name: 'Events',
     data(){
         return{
-            games: [],
+            events: [],
             empty: false,
         }
     },
@@ -15,9 +15,9 @@ export default {
                 authorization: `Bearer ${localStorage.getItem('token')}`
             }
         }
-        await axios.post('http://localhost:3000/api/update-games-data', {}, data).then((result) => {
+        await axios.post('http://localhost:3000/api/events_data', {}, data).then((result) => {
             if(result.data.length === 0) return this.empty = true
-            this.games = result
+            return this.events = result
         }).catch((err) => {
             return this.empty = true
         })
@@ -27,13 +27,17 @@ export default {
 
 <template>
     <div id="wrapper">
-        <p id="title">Games</p>
+        <p id="title">Events</p>
+
+        <div v-if="empty" id="empty-text">
+            <p>Currently there are no events to show</p>
+        </div>
+
         <div id="card-wrapper">
-            <div v-if="empty" id="empty-text">
-                <p >Currently there are no games to show</p>
-            </div>
-            <div class="card" v-for="item in this.games.data" :key="item">
-                <p>{{item.title}}</p>
+            <div class="card" v-for="i in events.data" :key="i">
+                <p>{{i.title}}</p>
+                <p>{{i.description}}</p>
+                <p>{{i.date}}</p>
             </div>
         </div>
     </div>
@@ -79,4 +83,5 @@ export default {
     font-size: 20px;
     margin: auto;
 }
+
 </style>

@@ -44,7 +44,7 @@ export default {
                 this.item2 = data[Math.floor(Math.random()*data.length)]
                 this.background_1 = this.item1.image
                 this.background_2 = this.item2.image
-            }, 4000)
+            }, 5000)
         })  
     },
 }

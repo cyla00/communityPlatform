@@ -6,7 +6,7 @@ import PubBanners from '../components/PubBanners.vue'
 import TopRanking from '../components/TopRanking.vue'
 import DashMainInfo from '../components/DashMainInfo.vue'
 import Games from '../components/Games.vue'
-import Friends from '../components/Friends.vue'
+import Events from '../components/Events.vue'
 
 import jwt_decode from "jwt-decode"
 const { io } = require("socket.io-client")
@@ -22,7 +22,7 @@ export default{
     TopRanking,
     DashMainInfo,
     Games,
-    Friends,
+    Events,
   },
   data(){
     return{
@@ -77,8 +77,9 @@ export default{
     }
   },
   async created(){
+    await this.getUserData() 
     const socket = io('http://localhost:3000', {transports: ['websocket'], upgrade: false})
-    await this.getUserData()          
+             
         socket.on('user_data', async (data) => {
             this.users.splice(0, this.users.length, ...data)
 
@@ -126,7 +127,7 @@ export default{
 
             <div class="game-wrapper">
                 <Games/>
-                <Friends/>
+                <Events/>
             </div>
 
         </div>
@@ -166,7 +167,7 @@ export default{
 .game-wrapper{
     display: grid;
     grid-template-rows: 1fr 1fr;
-    column-gap: 0.5em;
+    row-gap: 0.5em;
     margin-top: 0.5em;
 }
 

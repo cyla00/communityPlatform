@@ -29,13 +29,11 @@ import update_user_data from './modules/update_user_data'
 import { users } from './modules/update_user_data'
 
 import update_games_data from './modules/update_games_data'
-import { gamesData } from './modules/update_games_data'
 
 import advertisements_data from './modules/advertisements_data'
 import { advertisements } from './modules/advertisements_data'
 
 import events_data from './modules/events_data'
-import { eventsData } from './modules/events_data'
 
 import { buildDb, openDbConnection } from './modules/database'
 import { isBigIntLiteral } from 'typescript'
@@ -81,14 +79,11 @@ io.on('connection', (socket:any) => {
     socket.join('data_fetch')
     io.sockets.in('data_fetch').emit('user_data', users)
 
-    socket.join('games_fetch')
-    io.sockets.in('games_fetch').emit('games_data', gamesData)
-
     socket.join('advertisements_fetch')
     io.sockets.in('advertisements_fetch').emit('advertisement_data', advertisements)
 
-    socket.join('events_fetch')
-    io.sockets.in('events_fetch').emit('events_data', eventsData)
+    // socket.join('events_fetch')
+    // io.sockets.in('events_fetch').emit('events_data', eventsData)
 })
 
 
