@@ -5,8 +5,6 @@ const myCache = new NodeCache()
 import { openDbConnection } from './database'
 const client = openDbConnection()
 
-export let advertisements :Array<Object> = []
-
 router.post('/', async (req:any,res:any) => {
 
     await client.connect(async (err:any, db:any) => {
@@ -21,14 +19,10 @@ router.post('/', async (req:any,res:any) => {
             if(err) {
                 db.close()
                 return console.log(err)
-            }       
-            advertisements.splice(0, advertisements.length, ...advertisings)
+            }
+        
+            return res.status(200).send(advertisings) 
         })
-    })
-
-    myCache.set( "data", advertisements)
-    advertisements = myCache.take('data')
-    return res.sendStatus(200)
+        })
 })
-
 export default router

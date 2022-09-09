@@ -8,44 +8,34 @@ export default {
         return{
             item1: '',
             item2: '',
-            background_1: '',
-            background_2: '',
+            background_1: 'https://i.ibb.co/944y7Pr/e.png',
+            background_2: 'https://i.ibb.co/944y7Pr/e.png',
+            array: [],
             timer: null,
         }
     },
     methods: {
-    async getBanners(){
 
-        const data = {
+  },
+  async created(){
+    const data = {
             headers: {
                 authorization: `Bearer ${localStorage.getItem('token')}`
             }
         }
 
-        await axios.post('http://localhost:3000/api/advertisements_data', {}, data).catch((err) => {
+        await axios.post('http://localhost:3000/api/advertisements_data', {}, data).then((result) => {
+            if(result.data.length === 0) return
+            this.array.splice(0, this.array.length, ...result.data)
+        }).catch((err) => {
             return
-      })
-    },
-  },
-  async mounted(){
-    const socket = io('http://localhost:3000', {transports: ['websocket'], upgrade: false})
-        await this.getBanners()
-         socket.on('advertisement_data', async (data) => {
-            if(!data) {
-                this.background_1 = ''
-                this.background_2 = ''
-            }
-            this.item1 = data[Math.floor(Math.random()*data.length)]
-            this.item2 = data[Math.floor(Math.random()*data.length)]
+        })
+        setInterval(() => {
+            this.item1 = this.array[Math.floor(Math.random() * this.array.length)]
+            this.item2 = this.array[Math.floor(Math.random() * this.array.length)]
             this.background_1 = this.item1.image
             this.background_2 = this.item2.image
-            setInterval(() => {
-                this.item1 = data[Math.floor(Math.random()*data.length)]
-                this.item2 = data[Math.floor(Math.random()*data.length)]
-                this.background_1 = this.item1.image
-                this.background_2 = this.item2.image
-            }, 5000)
-        })  
+        }, 6000)
     },
 }
 </script>
@@ -56,7 +46,7 @@ export default {
             <div :style="{ '--bgImage1': `url(${background_1})` }" class="image-wrapper" id="bg-1"> 
                 <div class="text-wrapper">
                     <p>Promote your community or channel here!</p>
-                    <p>5:1 ratio 4sec gif</p>
+                    <p>5:1 ratio</p>
                 </div>
             </div>
         </div>
@@ -65,7 +55,7 @@ export default {
             <div :style="{ '--bgImage2': `url(${background_2})` }" class="image-wrapper" id="bg-2">
                 <div class="text-wrapper">
                     <p>Promote your community or channel here!</p>
-                    <p>5:1 ratio 4sec gif</p>
+                    <p>5:1 ratio</p>
                 </div>
             </div>
         </div>
