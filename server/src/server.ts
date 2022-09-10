@@ -34,14 +34,16 @@ import advertisements_data from './modules/advertisements_data'
 
 import events_data from './modules/events_data'
 
+import profile_image from './modules/profile_image'
+
 import { buildDb, openDbConnection } from './modules/database'
-import { isBigIntLiteral } from 'typescript'
 buildDb()
 // MIDDLEWARES EXPRESS
 app.use(cors())
 app.use(express.json())
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.urlencoded({extended: true}))
 app.use(cookieParser())
+app.use('/images', express.static('images'))
 
 // MIDDLEWARES SOCKET.IO
 // io.use((socket:any, next:any) => {
@@ -71,6 +73,7 @@ app.use('/api/update-user-data', jwt_verification, update_user_data)
 app.use('/api/update-games-data', jwt_verification, update_games_data)
 app.use('/api/advertisements_data', jwt_verification, advertisements_data)
 app.use('/api/events_data', jwt_verification, events_data)
+app.use('/api/save-profile-image', jwt_verification, profile_image)
 
 
 
