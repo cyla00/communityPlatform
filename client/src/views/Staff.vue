@@ -1,4 +1,5 @@
 <script>
+import Header from '@/components/GenHeader.vue'
 
 export default{
   name: 'Staff',
@@ -8,18 +9,14 @@ export default{
     }
   },
   components: {
-
+  Header,
   }
 }
 </script>
 
 <template>
-    <div>
-        <div>
-
-          <h1>profile page</h1>
-
-        </div>
+    <div id="wrapper">
+        <Header/>
     </div>
 </template>
 

@@ -15,6 +15,7 @@ import Admin from '@/views/Admin.vue'
 import Staff from '@/views/Staff.vue'
 import Nav from '@/views/Nav.vue'
 import Shop from '@/views/Shop.vue'
+import Bank from '@/views/Bank.vue'
 import jwt_decode from "jwt-decode"
 const axios = require('axios')
 
@@ -105,6 +106,14 @@ const routes: Array<RouteRecordRaw> = [
     path: '/profile',
     name: 'Profile',
     component: Profile,
+    meta: {
+      public: false,
+    },
+  },
+  {
+    path: '/bank',
+    name: 'Bank',
+    component: Bank,
     meta: {
       public: false,
     },

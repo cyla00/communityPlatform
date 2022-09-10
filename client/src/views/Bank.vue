@@ -2,7 +2,7 @@
 import Header from '@/components/GenHeader.vue'
 
 export default{
-  name: 'Admin',
+  name: 'Bank',
   data(){
     return{
 

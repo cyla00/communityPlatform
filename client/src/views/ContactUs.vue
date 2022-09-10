@@ -1,10 +1,22 @@
 <script>
+import Header from '@/components/GenHeader.vue'
 
+export default{
+  name: 'Contact',
+  data(){
+    return{
+
+    }
+  },
+  components: {
+  Header,
+  }
+}
 </script>
 
 <template>
-    <div>
-        CONTACT US
+    <div id="wrapper">
+        <Header/>
     </div>
 </template>
 

@@ -54,7 +54,17 @@ export default {
         </div>
 
         <div class="system-wrapper">
-
+            <div class="text-wrapper">
+                <p class="title">Follow us on the net!</p>
+                <div id="socials">
+                    <a class="social-links" href=""><i class='bx bxl-discord bx-md'></i></a>
+                    <a class="social-links" href=""><i class='bx bxl-telegram bx-md'></i></a>
+                    <a class="social-links" href=""><i class='bx bxl-youtube bx-md'></i></a>
+                    <a class="social-links" href=""><i class='bx bxl-tiktok bx-md'></i></a>
+                    <a class="social-links" href=""><i class='bx bxl-instagram-alt bx-md'></i></a>
+                    <a class="social-links" href=""><i class='bx bxl-twitter bx-md'></i></a>
+                </div>
+            </div>
         </div>
 
     </div>
@@ -69,6 +79,14 @@ export default {
 .v-enter-from,
 .v-leave-to {
   opacity: 0;
+}
+
+.social-links{
+    margin-right: 1em;
+    color: #d9d9d9;
+}
+.social-links:hover{
+    color: #ff00ff;
 }
 
 #modal{

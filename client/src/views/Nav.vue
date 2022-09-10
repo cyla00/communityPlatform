@@ -12,6 +12,17 @@ import jwt_decode from "jwt-decode"
 const { io } = require("socket.io-client")
 const axios = require('axios')
 
+const socket = io('ws://localhost:3000', {
+    reconnectionDelayMax: 10000,
+    transports: ["websocket"],
+    headers: {
+        authorization: `Bearer ${localStorage.getItem('token')}`
+    },
+    cors: {
+        origin: "ws://localhost:3000",
+    },
+})
+
 export default{
   name: 'Nav',
   components: {
@@ -60,8 +71,6 @@ export default{
       })
     },
     async update(){
-        const socket = io('http://localhost:3000', {transports: ['websocket'], upgrade: false})
-        
 
         socket.on('user_data', async (data) => {
             await this.getUserData()
@@ -78,8 +87,6 @@ export default{
   },
   async created(){
     await this.getUserData() 
-    const socket = io('http://localhost:3000', {transports: ['websocket'], upgrade: false})
-             
         socket.on('user_data', async (data) => {
             this.users.splice(0, this.users.length, ...data)
 
@@ -111,7 +118,7 @@ export default{
             <SidebarLink to="/staff" icon="bx bx-donate-heart bx-md" v-if="authority == 'staff'">Staff</SidebarLink>
             <SidebarLink to="/profile" icon="bx bx-user bx-md">User</SidebarLink>
             <SidebarLink to="/shop" icon="bx bx-store-alt bx-md">Shop</SidebarLink>
-            <SidebarLink to="/" icon="bx bx-home bx-md">Home</SidebarLink>
+            <SidebarLink to="/bank" icon="bx bxs-bank bx-md">Bank</SidebarLink>
             <SidebarLink to="/contact-us" icon="bx bx-help-circle bx-md">Contact</SidebarLink>
             <SidebarLink id="logout-link" to="" icon="bx bx-log-out-circle bx-md" @click="logout()">Logout</SidebarLink>
             </div>

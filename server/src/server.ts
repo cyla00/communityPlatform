@@ -11,7 +11,7 @@ const jwt = require('jsonwebtoken')
 const { Server } = require("socket.io")
 const io = new Server(server, {
     cors:{
-        origins: ["*"]
+        origin: `${process.env.CLIENT_HOST}`
     }
 })
 

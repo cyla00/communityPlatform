@@ -38,13 +38,12 @@ router.post('/', async (req:any,res:any) => {
                     add_friend_code: element.add_friend_code,
                 })
             })
-
             userData.splice(0, userData.length, ...array)
         })
     })
 
-    users = myCache.take('data')
     myCache.set( "data", userData)
+    users = myCache.take('data')
     return res.sendStatus(200)
 })
 

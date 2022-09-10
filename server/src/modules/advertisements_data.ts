@@ -20,7 +20,6 @@ router.post('/', async (req:any,res:any) => {
                 db.close()
                 return console.log(err)
             }
-        
             return res.status(200).send(advertisings) 
         })
         })
