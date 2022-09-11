@@ -63,6 +63,7 @@ export default{
     },
     removePic(){
       this.preview_image = 'https://i.ibb.co/5hbFmdF/New-Project.png'
+      return this.image = ''
     },
     async saveImage(){
       if(!this.image){

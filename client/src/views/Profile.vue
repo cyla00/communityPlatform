@@ -1,6 +1,7 @@
 <script>
 import Header from '@/components/GenHeader.vue'
 import ProfileImg from '@/components/profile/UserImg.vue'
+import UserData from '@/components/profile/UserData.vue'
 
 export default{
   name: 'Profile',
@@ -14,6 +15,7 @@ export default{
   components: {
     Header,
     ProfileImg,
+    UserData,
   },
   methods: {
     
@@ -28,6 +30,7 @@ export default{
     <div id="wrapper">
         <Header/>
         <ProfileImg/>
+        <UserData/>
     </div>
 </template>
 

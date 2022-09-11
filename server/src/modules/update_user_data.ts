@@ -36,6 +36,13 @@ router.post('/', async (req:any,res:any) => {
                     profile_banner: element.profile_banner,
                     user_referral_link: element.user_referral_link,
                     add_friend_code: element.add_friend_code,
+                    address: element.address,
+                    city: element.city,
+                    country: element.country,
+                    steam: element.steam_profile_link,
+                    discord: element.discord_username,
+                    twitch: element.twitch_link,
+                    youtube: element.youtube_link,
                 })
             })
             userData.splice(0, userData.length, ...array)
