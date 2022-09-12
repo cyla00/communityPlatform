@@ -115,7 +115,7 @@ router.post('/', (req:any,res:any) => {
                         add_friend_code: uuidv4(),
                         email: req.body.email, 
                         username: req.body.username,
-                        avatar: 'https://i.ibb.co/Y83nLm3/e9umssf3v5c21.png',
+                        avatar: 'https://i.ibb.co/8YxmZr7/icown.png',
                         profile_banner: './banners/default_banner.png',
                         password: SHA256(req.body.password).toString(),
                         birth_date: req.body.birth_date,

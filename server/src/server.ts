@@ -22,6 +22,9 @@ import token  from './modules/token'
 import email_verification  from './modules/email_verification'
 import recover_account from './modules/recover_account'
 import renew_password from './modules/renew_password'
+import change_password from './modules/change_password'
+import update_credentials from './modules/update_credentials'
+import delete_account from './modules/delete_account'
 
 import { jwt_verification } from './modules/jwt_verification'
 
@@ -44,6 +47,7 @@ app.use(express.json())
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(cookieParser())
 app.use('/images', express.static('images'))
+app.use('/games', express.static('games'))
 
 // MIDDLEWARES SOCKET.IO
 // io.use((socket:any, next:any) => {
@@ -74,7 +78,9 @@ app.use('/api/update-games-data', jwt_verification, update_games_data)
 app.use('/api/advertisements_data', jwt_verification, advertisements_data)
 app.use('/api/events_data', jwt_verification, events_data)
 app.use('/api/save-profile-image', jwt_verification, profile_image)
-
+app.use('/api/change-password', jwt_verification, change_password)
+app.use('/api/update-credentials', jwt_verification, update_credentials)
+app.use('/api/delete-account', jwt_verification, delete_account)
 
 
 io.on('connection', (socket:any) => {

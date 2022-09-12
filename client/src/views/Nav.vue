@@ -54,6 +54,14 @@ export default{
     }
   },
   methods: {
+    reloadPage(){
+        if (localStorage.getItem('reloaded')) {
+            localStorage.removeItem('reloaded')
+        } else {
+            localStorage.setItem('reloaded', '1')
+            location.reload()
+        }
+    },
     logout(){
         localStorage.clear()
         window.location.href = '/login'
@@ -70,20 +78,6 @@ export default{
             return
       })
     },
-    async update(){
-
-        socket.on('user_data', async (data) => {
-            await this.getUserData()
-            this.users.splice(0, this.users.length, ...data)
-
-            let context_user = this.users.find(element => element.id === localStorage.getItem('id'))
-            this.username = context_user.username
-            this.rank = context_user.user_rank
-            this.balance = context_user.balance
-            this.referral_link = context_user.user_referral_link
-            this.user_avatar = context_user.avatar
-        })
-    }
   },
   async created(){
     await this.getUserData() 
@@ -97,6 +91,7 @@ export default{
             this.referral_link = context_user.user_referral_link
             this.user_avatar = context_user.avatar
         })
+        this.reloadPage()
   }
 }
 </script>

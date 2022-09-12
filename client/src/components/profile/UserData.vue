@@ -13,6 +13,12 @@ const socket = io('ws://localhost:3000', {
     },
 })
 
+const auth = {
+    headers: {
+        authorization: `Bearer ${localStorage.getItem('token')}`
+    }
+}
+
 export default{
   name: 'UserData',
   data(){
@@ -34,12 +40,22 @@ export default{
         success_message: '',
         success: false,
         correctForm: true,
+        reloaded: false,
+        verify: false,
     }
   },
   components: {
 
   },
   methods: {
+    reloadPage(){
+        if (localStorage.getItem('reloaded')) {
+            localStorage.removeItem('reloaded')
+        } else {
+            localStorage.setItem('reloaded', '1')
+            location.reload()
+        }
+    },
     resetErrorMessage(){
       if(this.correctForm === false){
         setTimeout(() => {
@@ -54,6 +70,53 @@ export default{
         }, 4000)
       }
     },
+    async saveChanges(){
+        const validateEmail = (email) => {
+            return String(email)
+              .toLowerCase()
+              .match(
+                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            )
+        }
+
+        if(!validateEmail(this.email)){
+            this.error_message = 'Enter a valid email'
+            this.correctForm = false
+            return this.resetErrorMessage()
+        }
+
+        if(this.username === '' || this.email === ''){
+            this.error_message = 'Fill username and email'
+            this.correctForm = false
+            return this.resetErrorMessage()
+        }
+
+        const data = {
+            id: localStorage.getItem('id'),
+            email: this.email,
+            address: this.address,
+            city: this.city,
+            zip_code: this.zip_code,
+            country: this.country,
+            steam_link: this.steam,
+            discord_user: this.discord,
+            twitch_channel: this.twitch,
+            youtube_channel: this.youtube,
+        }
+
+        await axios.post('http://localhost:3000/api/update-credentials', data, auth).then((res) => {
+            if(res.status === 200){
+                this.success_message = 'Credentials successfully changed'
+                this.success = true
+                return this.resetSuccessMessage()
+            }
+        }).catch((err) => {
+            console.log(err)
+            this.error_message = err.response.data.error_message
+            this.correctForm = false
+            return this.resetErrorMessage()
+      })
+    },
     async getUserData(){
 
         const data = {
@@ -66,14 +129,63 @@ export default{
             return
       })
     },
-  },
-  async created(){
-    await this.getUserData() 
-    socket.on('user_data', async (data) => {
-        this.users.splice(0, this.users.length, ...data)
+    async deleteAccount(){
+        this.verify = true
+    },
+    async acceptDelete(){
+        const data = {
+            id: localStorage.getItem('id')
+        }
+        await axios.post('http://localhost:3000/api/delete-account', data, auth).then(() => {
+            localStorage.clear()
+            window.location.href = '/login'
+        }).catch((err) => {
+            this.error_message = err.response.data.error_message
+            this.correctForm = false
+            return this.resetErrorMessage()
+        })
+    },
+    goBack(){
+        this.verify = false
+    },
+    async changePass(){
+        if(this.old_password === '' || this.new_password === ''){
+            this.error_message = 'Fill all fields'
+            this.correctForm = false
+            return this.resetErrorMessage()
+        }
         
+        const passwordCheck = (passwordStrenght) => {
+            let strongPassword = new RegExp('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})')
+            return strongPassword.test(passwordStrenght)
+        }
+        if(!passwordCheck(this.new_password)) return this.error_message = 'Use a stronger password! (ex: AaZz19@#$)'
+
+        const data = {
+            id: localStorage.getItem('id'),
+            old_password: this.old_password,
+            new_password: this.new_password,
+        }
+        await axios.post('http://localhost:3000/api/change-password', data, auth).then((res) => {
+            if(res.status === 200){
+                this.success_message = 'Password successfully changed'
+                this.success = true
+                return this.resetSuccessMessage()
+            }
+        }).catch((err) => {
+            this.error_message = 'Password change failed'
+            this.correctForm = false
+            return this.resetErrorMessage()
+        })
+    },
+  },
+  created(){
+    this.getUserData() 
+    socket.on('user_data', (data) => {
+        
+        this.users.splice(0, this.users.length, ...data)
+            
         let context_user = this.users.find(element => element.id === localStorage.getItem('id'))
-        console.log(context_user);
         this.username = context_user.username
         this.email = context_user.email
         this.address = context_user.address
@@ -85,80 +197,77 @@ export default{
         this.twitch = context_user.twitch_link
         this.youtube = context_user.youtube_link
     })
+    this.reloadPage()
   }
 }
 </script>
 
 <template>
     <div id="wrapper">
-        <h3>User credentials</h3>
-        <div class="input-wrapper">
-            <div>
-                <label for="username">username</label>
-                <input type="text" v-model="username" class="data-input">
+            <div id="primer-wrapper" class="inner">
+                <h3>General</h3>
+                <div>
+                    <input type="text" v-model="username" class="data-input" placeholder="username" readonly>
+                </div>
+                
+                <div>
+                    <input type="text" v-model="email" class="data-input" placeholder="email" readonly>
+                </div>
+
+                <div>
+                    <h3>Change password</h3>
+                    <input type="password" v-model="old_password" class="data-input" placeholder="password">
+                    <input type="password" v-model="new_password" class="data-input" placeholder="new password">
+                    <button @click="changePass">Change password</button>
+                </div>
             </div>
-            
-            <div>
-                <label for="email">email</label>
-                <input type="text" v-model="email" class="data-input">
-            </div>
-            
-        </div>
         
-        <div class="input-wrapper">
-            <div>
-                <label for="password">Change password</label>
-                <input type="password" v-model="old_password" class="data-input" placeholder="password">
-                <input type="password" v-model="new_password" class="data-input" placeholder="new password">
+            <div id="country" class="inner">
+                <h3>Location</h3>
+                <div class="country-wrapper">
+                    <input type="text" v-model="address" class="data-input" placeholder="address">
+                </div>
+                
+                <div class="country-wrapper">
+                    <input type="text" v-model="city" class="data-input" placeholder="city">
+                </div>
+                
+                <div class="country-wrapper">
+                    <input type="text" v-model="zip_code" class="data-input" placeholder="Zip code">
+                </div>
+                
+                <div class="country-wrapper">
+                    <input type="context_user" v-model="country" class="data-input" readonly>
+                </div>
             </div>
-        </div>
+            
 
-        <h3>your links</h3>
+
         
-        <div class="input-wrapper">
-            <div>
-                <label for="address">address</label>
-                <input type="text" v-model="address" class="data-input">
-            </div>
-            
-            <div>
-                <label for="city">City</label>
-                <input type="text" v-model="city" class="data-input">
-            </div>
-            
-            <div>
-                <label for="city">City</label>
-                <input type="text" v-model="zip_code" class="data-input">
-            </div>
-            
-            <div>
-                <label for="country">Country</label>
-                <input type="context_user" v-model="country" class="data-input" readonly>
-            </div>
-        </div>
-        
-        <div class="input-wrapper">
-            <div>
-                <i class='bx bxl-steam bx-md'></i><input type="text" v-model="steam" class="data-input" placeholder="steam link">
-            </div>
-            
-            <div>
-                <i class='bx bxl-discord bx-md' ></i><input type="text" v-model="discord" class="data-input" placeholder="username#0000">
-            </div>
-            
-            <div>
-                <i class='bx bxl-twitch bx-md' ></i><input type="text" v-model="twitch" class="data-input" placeholder="twitch channel">
-            </div>
-            
-            <div>
-                <i class='bx bxl-youtube bx-md' ></i><input type="text" v-model="youtube" class="data-input" placeholder="youtube channel">
-            </div>
-            
-        </div>
 
-
-
-
+            <div id="links" class="inner">
+                <h3>Links</h3>
+                <div class="links-wrappers">
+                    <i class='bx bxl-steam bx-md'></i><input type="text" v-model="steam" class="data-input" placeholder="steam link">
+                </div>
+                
+                <div class="links-wrappers">
+                    <i class='bx bxl-discord bx-md' ></i><input type="text" v-model="discord" class="data-input" placeholder="username#0000">
+                </div>
+                
+                <div class="links-wrappers">
+                    <i class='bx bxl-twitch bx-md' ></i><input type="text" v-model="twitch" class="data-input" placeholder="twitch channel">
+                </div>
+                
+                <div class="links-wrappers">
+                    <i class='bx bxl-youtube bx-md' ></i><input type="text" v-model="youtube" class="data-input" placeholder="youtube channel">
+                </div>
+            </div>
+            <div></div>
+            <div id="button-wrapper">
+                <button @click="deleteAccount" id="delete">Delete account</button>
+                <button @click="saveChanges" id="save">Save changes</button>
+            </div>
 
         <Teleport to="body">
             <Transition>
@@ -176,9 +285,17 @@ export default{
             </Transition>
         </Teleport>
 
+        <Teleport to="body">
+            <Transition>
+            <div class="modal verify" v-if="verify">
+                <p class="img-err-p"><i class='bx bx-error bx-sm'></i>By deleting your account, all your data will be deleted.<br>and you wont be able to recover it.<i class='bx bx-error bx-sm'></i></p>
+                <button @click="acceptDelete" id="delete-btn">Delete my account</button>
+                <button @click="goBack" id="back-btn">Go back</button>
+            </div>
+            </Transition>
+        </Teleport>
 
-
-
+        
         
     </div>
 </template>
@@ -206,6 +323,7 @@ export default{
     font-weight: bold;
     padding: 0.5em;
     border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
     text-align: center;
 }
 .success{
@@ -213,17 +331,23 @@ export default{
     color: #00ca4e !important;
 }
 
-
-
-
 #wrapper{
-    width: 50em;
-    height: 100%;
     margin: auto;
     margin-top: 2em;
-    justify-content: center;
-    align-content: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
 }
+
+#delete{
+    background: #ff605c;
+}
+
+.inner{
+    width: 30em;
+    margin-inline: auto;
+}
+
 .data-input{
     margin: auto;
     width: 90%;
@@ -239,13 +363,6 @@ export default{
     font-weight: bold;
 }
 
-.input-wrapper{
-    margin-top: 1em;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-}
-
 h3{
     color: #F40552;
     font-weight: bold;
@@ -253,5 +370,48 @@ h3{
 
 ::placeholder {
   color: rgba(217, 217, 217, 0.5);
+}
+
+button{
+  background-color: #00ca4e ;
+  color: #d9d9d9;
+  padding: 0.5em;
+  border-radius: 5px;
+  margin: 2em;
+  /* width: 5em; */
+  font-weight: bold;
+}
+button:hover{
+  color: #50607c;
+}
+
+.links-wrappers{
+    display: flex;
+}
+i{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-inline: 0.2em;
+}
+
+.img-err-p{
+    display: flex;
+}
+
+#delete-btn{
+    background: #ff605c;
+    color: #50607c;
+}
+#back-btn{
+    background: #ffbd44;
+    color: #50607c;
+}
+
+#delete-btn:hover{
+    color: black;
+}
+#back-btn:hover{
+    color: black;
 }
 </style>

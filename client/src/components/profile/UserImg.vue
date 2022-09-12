@@ -158,6 +158,7 @@ export default{
     font-weight: bold;
     padding: 0.5em;
     border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
     text-align: center;
 }
 .success{
@@ -187,7 +188,7 @@ export default{
   margin-left: 0.5em;
 }
 .btn-img:hover{
-  color: #F40552;
+  color: #50607c;
   background-color: #50607c;
 }
 

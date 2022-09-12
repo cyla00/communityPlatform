@@ -49,7 +49,7 @@ router.post('/', async (req:any,res:any) => {
         })
     })
 
-    myCache.set( "data", userData)
+    myCache.set( "data", userData, 60)
     users = myCache.take('data')
     return res.sendStatus(200)
 })
