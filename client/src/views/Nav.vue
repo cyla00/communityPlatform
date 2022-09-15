@@ -1,12 +1,13 @@
 <script>
-import {collapsed, toggleSidebar, sidebarWidth} from '../components/state'
-import SidebarLink from '../components/SidebarLink.vue'
-import SecHeader from '../components/SecHeader.vue'
-import PubBanners from '../components/PubBanners.vue'
-import TopRanking from '../components/TopRanking.vue'
-import DashMainInfo from '../components/DashMainInfo.vue'
-import Games from '../components/Games.vue'
-import Events from '../components/Events.vue'
+import {collapsed, toggleSidebar, sidebarWidth} from '@/components/state'
+import SidebarLink from '@/components/SidebarLink.vue'
+import SecHeader from '@/components/SecHeader.vue'
+import PubBanners from '@/components/PubBanners.vue'
+import TopRanking from '@/components/TopRanking.vue'
+import DashMainInfo from '@/components/DashMainInfo.vue'
+import Games from '@/components/Games.vue'
+import Events from '@/components/Events.vue'
+import Servers from '@/components/Servers.vue'
 
 import jwt_decode from "jwt-decode"
 const { io } = require("socket.io-client")
@@ -34,6 +35,7 @@ export default{
     DashMainInfo,
     Games,
     Events,
+    Servers,
   },
   data(){
     return{
@@ -113,6 +115,7 @@ export default{
             <SidebarLink to="/admin" icon="bx bxs-check-shield bx-md" v-if="authority == 'admin'">Admin</SidebarLink>
             <SidebarLink to="/staff" icon="bx bx-donate-heart bx-md" v-if="authority == 'staff'">Staff</SidebarLink>
             <SidebarLink to="/profile" icon="bx bx-user bx-md">User</SidebarLink>
+            <SidebarLink to="/community" icon="bx bxs-business bx-md">Community</SidebarLink>
             <SidebarLink to="/shop" icon="bx bx-store-alt bx-md">Shop</SidebarLink>
             <SidebarLink to="/bank" icon="bx bxs-bank bx-md">Bank</SidebarLink>
             <SidebarLink to="/contact-us" icon="bx bx-help-circle bx-md">Contact</SidebarLink>
@@ -130,6 +133,7 @@ export default{
 
             <div class="game-wrapper">
                 <Games/>
+                <Servers/>
                 <Events/>
             </div>
 
@@ -169,7 +173,7 @@ export default{
 
 .game-wrapper{
     display: grid;
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
     row-gap: 0.5em;
     margin-top: 0.5em;
 }

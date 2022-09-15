@@ -10,13 +10,13 @@ const auth = {
 }
 
 export default{
-  name: 'Games',
+  name: 'Servers',
   data(){
         return{
-            games: [],
-            empty: false,
-            new_title: '',
-            image: '',
+            servers: [],
+            title: '',
+            host: '',
+            port: '',
             error_message: '',
             success_message: '',
             correctForm: true,
@@ -38,18 +38,20 @@ export default{
                 }, 3000)
             }
         },
-        async addGame(){
-            if(this.new_title === ''){
+        async addServer(){
+            if(this.title === '' || this.host === '' || this.port === ''){
                 this.error_message = 'please fill all fields'
                 this.correctForm = false
                 return this.resetErrorMessage()
             }
 
-            let data = new FormData()
-            const imgType = this.image.type.split('/')[1]
-            data.append('file', this.image, `${this.new_title}.${imgType}`)
+            const data = {
+                title: this.title,
+                host: this.host,
+                port: this.port,
+            }
 
-            await axios.post('http://localhost:3000/api/add-game', data, auth).then(res => {
+            await axios.post('http://localhost:3000/api/add-server', data, auth).then(res => {
                 this.success_message = res.data.success_message
                 this.success = true
                 this.resetSuccessMessage()
@@ -60,12 +62,12 @@ export default{
                 return this.resetErrorMessage()
             })
         },
-        async deleteGame(id){
+        async deleteServer(id){
             if(!confirm("Are you sure?")) return
             const data = {
                 id: id
             }
-            await axios.post('http://localhost:3000/api/remove-game', data, auth).then(res => {
+            await axios.post('http://localhost:3000/api/remove-server', data, auth).then(res => {
                 this.success_message = res.data.success_message
                 this.success = true
                 this.resetSuccessMessage()
@@ -76,36 +78,17 @@ export default{
                 return this.resetErrorMessage()
             })
         },
-        onFilePicked(event){
-            const files = event.target.files
-            const fileReader = new FileReader()
-            fileReader.addEventListener('load', () => {
-                this.imageUrl = fileReader.result
-            })
-            fileReader.readAsDataURL(files[0])
-            this.image = files[0]
-            if(!this.image.type === "image/png" || !this.image.type === "image/jpeg") {
-                this.correctForm = false
-                this.resetErrorMessage()
-                return this.error_message = 'The picture has to be jpg/png format'
-            }
-            if(this.image.size > 3000000) {
-                this.correctForm = false
-                this.resetErrorMessage()
-                return this.error_message = 'The picture has to be less than 3 mb'
-            }
-        },
     },
     async created(){
         
-        const data = {
+        const auth = {
             headers: {
                 authorization: `Bearer ${localStorage.getItem('token')}`
             }
         }
-        await axios.post('http://localhost:3000/api/update-games-data', {}, data).then((result) => {
+        await axios.post('http://localhost:3000/api/update-servers-data', {}, auth).then((result) => {
             if(result.data.length === 0) return this.empty = true
-            this.games = result
+            this.servers = result
         }).catch((err) => {
             return this.empty = true
         })
@@ -116,15 +99,16 @@ export default{
 <template>
 
     <div id="wrapper">
-        <h1>games</h1>
-        <input type="text" v-model="new_title" placeholder="new game title">
-        <input type="file" ref="fileInput" accept="image/png,image/jpeg" @change="onFilePicked"/>
-        <p>picture 3:4 ratio no spaces on title</p>
-        <button class="add_game" @click="addGame">add game</button>
+        <h1>Servers</h1>
+        <input type="text" v-model="title" placeholder="Server title">
+        <input type="text" v-model="host" placeholder="host">
+        <input type="text" v-model="port" placeholder="port">
+        <button class="add_server" @click="addServer">add server</button>
 
-        <div class="games-wrapper" v-for="i in this.games.data" :key="i">
+        <div class="servers-wrapper" v-for="i in this.servers.data" :key="i">
             <p class="title">{{i.title}}</p>
-            <button class="remove_game" @click="deleteGame(i.id)">remove Game</button>
+            <p>{{i.host}}:{{i.port}}</p>
+            <button class="remove_server" @click="deleteServer(i.id)">remove server</button>
         </div>
 
         <Teleport to="body">
@@ -200,17 +184,18 @@ input{
     margin-right: 0.5em;
     
 }
-.games-wrapper{
+.servers-wrapper{
     display: flex;
     height: 100%;
     margin: auto;
 }
-.remove_game{
+
+.remove_server{
     margin: auto;
     background: #ff605c;
     border-radius: 5px;
 }
-.add_game{
+.add_server{
     background: #00ca4e;
     border-radius: 5px;
     margin: auto;

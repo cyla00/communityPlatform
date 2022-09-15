@@ -27,6 +27,9 @@ import update_credentials from './modules/update_credentials'
 import delete_account from './modules/delete_account'
 import add_game from './modules/add_game'
 import remove_game from './modules/remove_game'
+import get_servers from './modules/get_servers'
+import add_server from './modules/add_server'
+import remove_server from './modules/remove_server'
 
 import { jwt_verification } from './modules/jwt_verification'
 
@@ -85,6 +88,9 @@ app.use('/api/update-credentials', jwt_verification, update_credentials)
 app.use('/api/delete-account', jwt_verification, delete_account)
 app.use('/api/add-game', jwt_verification, add_game)
 app.use('/api/remove-game', jwt_verification, remove_game)
+app.use('/api/update-servers-data', jwt_verification, get_servers)
+app.use('/api/add-server', jwt_verification, add_server)
+app.use('/api/remove-server', jwt_verification, remove_server)
 
 
 io.on('connection', (socket:any) => {

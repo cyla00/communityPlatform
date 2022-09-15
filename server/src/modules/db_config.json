@@ -2,6 +2,7 @@
     "db_collection_list": [
         "users",
         "games",
+        "servers",
         "advertisings",
         "platform_view_method",
         "communities",

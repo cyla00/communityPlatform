@@ -2,22 +2,22 @@
 const axios = require('axios')
 
 export default {
-    name: 'Games',
+    name: 'Servers',
     data(){
         return{
-            games: [],
+            servers: [],
             empty: false,
         }
     },
     async created(){
-        const auth = {
+        const data = {
             headers: {
                 authorization: `Bearer ${localStorage.getItem('token')}`
             }
         }
-        await axios.post('http://localhost:3000/api/update-games-data', {}, auth).then((result) => {
+        await axios.post('http://localhost:3000/api/update-servers-data', {}, data).then((result) => {
             if(result.data.length === 0) return this.empty = true
-            this.games = result
+            return this.servers = result
         }).catch((err) => {
             return this.empty = true
         })
@@ -27,25 +27,27 @@ export default {
 
 <template>
     <div id="wrapper">
-        <p id="title">The games we play</p>
+        <p id="title">Our Servers</p>
+
+        <div v-if="empty" id="empty-text">
+            <p>Currently there are no servers to show</p>
+        </div>
+
         <div id="card-wrapper">
-            <div v-if="empty" id="empty-text">
-                <p >Currently there are no games to show</p>
-            </div>
-            <div class="card" v-for="item in this.games.data" :key="item">
-                <div class="game-image-wrapper" :style="{ '--game-card-bg': `url(${item.image})` }">
-                    <p class="title">{{item.title}}</p>
+            <div class="card" v-for="i in servers.data" :key="i">
+                <div class="server-wrapper">
+                    <div class="dot"></div>
+                    <p class="p-content p-title">{{i.title}}</p>
+                    <p class="p-content"><span class="p-host">{{i.host}}</span> : <span class="p-port">{{i.port}}</span></p>
+                    
                 </div>
+                
             </div>
         </div>
     </div>
 </template>
 
 <style scoped>
-:root{
-    --game-card-bg: '';
-}
-
 #wrapper{
     background: rgba(49, 62, 70, 0.3);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
@@ -70,6 +72,7 @@ export default {
     border-radius: 5px;
     margin: 0.5em;
     border: none;
+    border-radius: 5px;
 }
 
 #title{
@@ -86,38 +89,40 @@ export default {
     margin: auto;
 }
 
-.card-text-wrapper{
-    color: #d9d9d9;
-}
-.game-image-wrapper{
-    background-image: var(--game-card-bg);
+.server-wrapper{
+    background-image: url('https://i.ibb.co/wW0z8kV/icon2.png');
     height: 20em;
     width: 15em;
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
     z-index: 1;
-    -webkit-box-shadow: 0 0 50px 20px #242C35 inset;
-    -moz-box-shadow: 0 0 50px 20px #242C35 inset;
-    box-shadow: 0 0 50px 20px #242C35 inset;
-}
-.title{
-    margin: auto;
-    background: #242C35;
-    font-weight: bold;
-    font-size: 0.9em;
-}
-
-button{
-    margin-top: 100%;
-    background: #9efd38;
-    padding: 0.5em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     border-radius: 5px;
-    font-weight: bold;
-    font-size: 0.9em;
 }
 
-button:hover{
-    color: #ffffff;
+.p-content{
+    margin: 0;
+}
+.p-title{
+    color: #00ffcc;
+}
+.p-host{
+    color: #ff00ff;
+}
+.p-port{
+    color: #ff66ff;
+    padding: 0;
+}
+
+.dot{
+    height: 1em;
+    width: 1em;
+    border-radius: 100%;
+    background-color: #00ca4e;
+    margin: 1em;
+    margin-inline: auto;
 }
 </style>
