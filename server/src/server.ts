@@ -25,6 +25,8 @@ import renew_password from './modules/renew_password'
 import change_password from './modules/change_password'
 import update_credentials from './modules/update_credentials'
 import delete_account from './modules/delete_account'
+import add_game from './modules/add_game'
+import remove_game from './modules/remove_game'
 
 import { jwt_verification } from './modules/jwt_verification'
 
@@ -81,9 +83,12 @@ app.use('/api/save-profile-image', jwt_verification, profile_image)
 app.use('/api/change-password', jwt_verification, change_password)
 app.use('/api/update-credentials', jwt_verification, update_credentials)
 app.use('/api/delete-account', jwt_verification, delete_account)
+app.use('/api/add-game', jwt_verification, add_game)
+app.use('/api/remove-game', jwt_verification, remove_game)
 
 
 io.on('connection', (socket:any) => {
+
     socket.join('data_fetch')
     io.sockets.in('data_fetch').emit('user_data', users)
 })

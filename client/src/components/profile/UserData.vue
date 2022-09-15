@@ -378,11 +378,10 @@ button{
   padding: 0.5em;
   border-radius: 5px;
   margin: 2em;
-  /* width: 5em; */
   font-weight: bold;
 }
 button:hover{
-  color: #50607c;
+  color: #19353B;
 }
 
 .links-wrappers{

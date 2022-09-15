@@ -188,7 +188,7 @@ export default{
   margin-left: 0.5em;
 }
 .btn-img:hover{
-  color: #50607c;
+  color: #19353B;
   background-color: #50607c;
 }
 
