@@ -92,7 +92,7 @@ export default{
             this.referral_link = context_user.user_referral_link
             this.user_avatar = context_user.avatar
         })
-        // this.reloadPage()
+        this.reloadPage()
   }
 }
 </script>

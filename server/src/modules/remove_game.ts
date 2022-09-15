@@ -27,8 +27,6 @@ router.post('/', async (req:any,res:any) => {
 
         const myquery = {id: req.body.id}
         await myDb.collection('games').deleteOne(myquery, {}, {}).then((document:any) => {
-            console.log(document);
-            console.log(req.body.id);
             
             if(document.deletedCount < 1) {
                 db.close()

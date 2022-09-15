@@ -56,11 +56,10 @@ export default{
             })
         },
         async deleteGame(id){
-
+            if(!confirm("Are you sure?")) return
             const data = {
                 id: id
             }
-            console.log(data);
             await axios.post('http://localhost:3000/api/remove-game', data, auth).then(res => {
                 this.success_message = res.data.success_message
                 this.success = true
@@ -118,16 +117,11 @@ export default{
         <h1>games</h1>
         <input type="text" v-model="new_title" placeholder="new game title">
         <input type="file" ref="fileInput" accept="image/png,image/jpeg" @change="onFilePicked"/>
+        <p>picture 3:4 ratio no spaces on title</p>
         <button class="add_game" @click="addGame">add game</button>
 
         <div class="games-wrapper" v-for="i in this.games.data" :key="i">
             <p class="title">{{i.title}}</p>
-            <div class="dropdown">
-                <div v-for="server in i.server_data" :key="server" class="server-wrapper">
-                    <p>{{server.host}}:{{server.port}}</p>
-                    <button class="remove_server">Remove server</button>
-                </div>
-            </div>
             <button class="add_server">add server</button>
             <button class="remove_game" @click="deleteGame(i.id)">remove Game</button>
         </div>

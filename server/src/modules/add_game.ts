@@ -40,7 +40,7 @@ router.post('/', upload.single('file'), async (req:any,res:any) => {
         const myDb = db.db(process.env.MONGO_DATABASE)
         const title = req.file.originalname.split('.')[0]
 
-        const myquery = {id: uuidv4(), title: title, image: filePath, private: false, server_data: [{host: '', port: ''}]}
+        const myquery = {id: uuidv4(), title: title, image: filePath, private: false, server_data: [{id: uuidv4(), host: '', port: '', whitelist: []}]}
         await myDb.collection('games').insertOne(myquery).then((document:any) => {
             if(!document.acknowledged) {
                 db.close()
