@@ -35,6 +35,7 @@ export default {
             <div class="card" v-for="item in this.games.data" :key="item">
                 <div class="game-image-wrapper" :style="{ '--game-card-bg': `url(${item.image})` }">
                     <p class="title">{{item.title}}</p>
+                    <button v-if="item.private">Get Whitelisted</button>
                 </div>
             </div>
         </div>
@@ -106,5 +107,18 @@ export default {
     background: #242C35;
     font-weight: bold;
     font-size: 0.9em;
+}
+
+button{
+    margin-top: 100%;
+    background: #9efd38;
+    padding: 0.5em;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+button:hover{
+    color: #ffffff;
 }
 </style>
