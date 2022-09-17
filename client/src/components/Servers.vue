@@ -39,7 +39,6 @@ export default {
                     <div class="dot"></div>
                     <p class="p-content p-title">{{i.title}}</p>
                     <p class="p-content"><span class="p-host">{{i.host}}</span> : <span class="p-port">{{i.port}}</span></p>
-                    
                 </div>
                 
             </div>
@@ -90,12 +89,12 @@ export default {
 }
 
 .server-wrapper{
-    background-image: url('https://i.ibb.co/wW0z8kV/icon2.png');
+    background-image: url('https://i.ibb.co/93CzbnC/server-1.png');
     height: 20em;
     width: 15em;
     background-position: center;
     background-repeat: no-repeat;
-    background-size: contain;
+    background-size: 13em;
     z-index: 1;
     display: flex;
     flex-direction: column;

@@ -30,6 +30,9 @@ import remove_game from './modules/remove_game'
 import get_servers from './modules/get_servers'
 import add_server from './modules/add_server'
 import remove_server from './modules/remove_server'
+import referral from './modules/referral'
+import get_events from './modules/get_events'
+import add_event from './modules/add_event'
 
 import { jwt_verification } from './modules/jwt_verification'
 
@@ -45,6 +48,7 @@ import events_data from './modules/events_data'
 import profile_image from './modules/profile_image'
 
 import { buildDb, openDbConnection } from './modules/database'
+import { application } from 'express'
 buildDb()
 // MIDDLEWARES EXPRESS
 app.use(cors())
@@ -73,6 +77,7 @@ app.use('/games', express.static('games'))
 
 // ROUTES
 app.use('/api/registration', registration)
+app.use('/api/referral', referral)
 app.use('/api/verify-email', email_verification)
 app.use('/api/login', login)
 app.use('/api/token', jwt_verification, token)
@@ -81,7 +86,6 @@ app.use('/api/set-pass', renew_password)
 app.use('/api/update-user-data', jwt_verification, update_user_data)
 app.use('/api/update-games-data', jwt_verification, update_games_data)
 app.use('/api/advertisements_data', jwt_verification, advertisements_data)
-app.use('/api/events_data', jwt_verification, events_data)
 app.use('/api/save-profile-image', jwt_verification, profile_image)
 app.use('/api/change-password', jwt_verification, change_password)
 app.use('/api/update-credentials', jwt_verification, update_credentials)
@@ -91,6 +95,8 @@ app.use('/api/remove-game', jwt_verification, remove_game)
 app.use('/api/update-servers-data', jwt_verification, get_servers)
 app.use('/api/add-server', jwt_verification, add_server)
 app.use('/api/remove-server', jwt_verification, remove_server)
+app.use('/api/add-event', jwt_verification, add_event)
+app.use('/api/update-events-data', jwt_verification, get_events)
 
 
 io.on('connection', (socket:any) => {

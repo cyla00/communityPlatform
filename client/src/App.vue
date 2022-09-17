@@ -39,4 +39,26 @@ button {
   outline: none;
   background: none;
 }
+
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #242C35;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #536479;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #8697ac;
+}
+
 </style>
