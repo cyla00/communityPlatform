@@ -7,6 +7,7 @@ export default {
         return{
             events: [],
             empty: false,
+            games: [],
         }
     },
     async created(){
@@ -37,7 +38,8 @@ export default {
             <div class="card" v-for="i in events.data" :key="i">
                 <div class="server-wrapper">
                     <p class="p-content p-title">{{i.title}}</p>
-                    <p class="p-content">{{i.description}}</p>
+                    <p class="p-content p-description">{{i.description}}</p>
+                    <img src="https://i.ibb.co/dcLPQXG/award.png" alt="">
                     <p class="p-content p-date">{{i.date}}</p>
                 </div>
                 
@@ -101,7 +103,9 @@ export default {
     justify-content: center;
     border-radius: 5px;
 }
-
+.p-description{
+    font-size: 0.8em;
+}
 .p-content{
     margin: 0;
 }
@@ -110,6 +114,10 @@ export default {
 }
 .p-date{
     color: #ff00ff;
+}
+img{
+    width: 5em;
+    margin: auto;
 }
 </style>
 

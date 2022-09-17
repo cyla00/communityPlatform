@@ -33,6 +33,7 @@ import remove_server from './modules/remove_server'
 import referral from './modules/referral'
 import get_events from './modules/get_events'
 import add_event from './modules/add_event'
+import remove_event from './modules/remove_event'
 
 import { jwt_verification } from './modules/jwt_verification'
 
@@ -97,6 +98,7 @@ app.use('/api/add-server', jwt_verification, add_server)
 app.use('/api/remove-server', jwt_verification, remove_server)
 app.use('/api/add-event', jwt_verification, add_event)
 app.use('/api/update-events-data', jwt_verification, get_events)
+app.use('/api/remove-event', jwt_verification, remove_event)
 
 
 io.on('connection', (socket:any) => {
