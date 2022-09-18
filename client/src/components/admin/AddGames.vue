@@ -204,6 +204,7 @@ input{
     display: flex;
     height: 100%;
     margin: auto;
+    border: solid 1px black;
 }
 .remove_game{
     margin: auto;

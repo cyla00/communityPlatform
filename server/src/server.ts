@@ -34,6 +34,8 @@ import referral from './modules/referral'
 import get_events from './modules/get_events'
 import add_event from './modules/add_event'
 import remove_event from './modules/remove_event'
+import add_advertisement from './modules/add_advertisement'
+import remove_advertisement from './modules/remove_advertisement'
 
 import { jwt_verification } from './modules/jwt_verification'
 
@@ -58,6 +60,7 @@ app.use(bodyParser.urlencoded({extended: true}))
 app.use(cookieParser())
 app.use('/images', express.static('images'))
 app.use('/games', express.static('games'))
+app.use('/advertisements', express.static('advertisements'))
 
 // MIDDLEWARES SOCKET.IO
 // io.use((socket:any, next:any) => {
@@ -86,7 +89,7 @@ app.use('/api/recover-account', recover_account)
 app.use('/api/set-pass', renew_password)
 app.use('/api/update-user-data', jwt_verification, update_user_data)
 app.use('/api/update-games-data', jwt_verification, update_games_data)
-app.use('/api/advertisements_data', jwt_verification, advertisements_data)
+app.use('/api/advertisements-data', jwt_verification, advertisements_data)
 app.use('/api/save-profile-image', jwt_verification, profile_image)
 app.use('/api/change-password', jwt_verification, change_password)
 app.use('/api/update-credentials', jwt_verification, update_credentials)
@@ -99,6 +102,8 @@ app.use('/api/remove-server', jwt_verification, remove_server)
 app.use('/api/add-event', jwt_verification, add_event)
 app.use('/api/update-events-data', jwt_verification, get_events)
 app.use('/api/remove-event', jwt_verification, remove_event)
+app.use('/api/add-advertisement', jwt_verification, add_advertisement)
+app.use('/api/remove-advertisement', jwt_verification, remove_advertisement)
 
 
 io.on('connection', (socket:any) => {

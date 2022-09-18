@@ -10,13 +10,13 @@ const auth = {
 }
 
 export default{
-  name: 'Servers',
+  name: 'Advertisement',
   data(){
         return{
-            events: [],
-            title: '',
-            description: '',
-            date: '',
+            advertisements: [],
+            empty: false,
+            new_title: '',
+            image: '',
             error_message: '',
             success_message: '',
             correctForm: true,
@@ -38,20 +38,18 @@ export default{
                 }, 3000)
             }
         },
-        async addEvent(){
-            if(this.title === '' || this.description === '' || this.date === ''){
+        async addAdvertisement(){
+            if(this.new_title === ''){
                 this.error_message = 'please fill all fields'
                 this.correctForm = false
                 return this.resetErrorMessage()
             }
 
-            const data = {
-                title: this.title,
-                description: this.description,
-                date: this.date,
-            }
+            let data = new FormData()
+            const imgType = this.image.type.split('/')[1]
+            data.append('file', this.image, `${this.new_title}.${imgType}`)
 
-            await axios.post('http://localhost:3000/api/add-event', data, auth).then(res => {
+            await axios.post('http://localhost:3000/api/add-advertisement', data, auth).then(res => {
                 this.success_message = res.data.success_message
                 this.success = true
                 this.resetSuccessMessage()
@@ -62,12 +60,16 @@ export default{
                 return this.resetErrorMessage()
             })
         },
-        async deleteEvent(id){
+        isPast(expiration){
+            const today = new Date().toISOString()
+            return expiration < today
+        },
+        async deleteAdvertisement(id){
             if(!confirm("Are you sure?")) return
             const data = {
                 id: id
             }
-            await axios.post('http://localhost:3000/api/remove-event', data, auth).then(res => {
+            await axios.post('http://localhost:3000/api/remove-advertisement', data, auth).then(res => {
                 this.success_message = res.data.success_message
                 this.success = true
                 this.resetSuccessMessage()
@@ -78,37 +80,56 @@ export default{
                 return this.resetErrorMessage()
             })
         },
+        onFilePicked(event){
+            const files = event.target.files
+            const fileReader = new FileReader()
+            fileReader.addEventListener('load', () => {
+                this.imageUrl = fileReader.result
+            })
+            fileReader.readAsDataURL(files[0])
+            this.image = files[0]
+            if(!this.image.type === "image/png" || !this.image.type === "image/jpeg") {
+                this.correctForm = false
+                this.resetErrorMessage()
+                return this.error_message = 'The picture has to be jpg/png format'
+            }
+            if(this.image.size > 3000000) {
+                this.correctForm = false
+                this.resetErrorMessage()
+                return this.error_message = 'The picture has to be less than 3 mb'
+            }
+        },
     },
     async created(){
         
-        const auth = {
+        const data = {
             headers: {
                 authorization: `Bearer ${localStorage.getItem('token')}`
             }
         }
-        await axios.post('http://localhost:3000/api/update-events-data', {}, auth).then((result) => {
+        await axios.post('http://localhost:3000/api/advertisements-data', {}, data).then((result) => {
             if(result.data.length === 0) return this.empty = true
-            this.events = result
+            this.advertisements = result
         }).catch((err) => {
             return this.empty = true
         })
-    } 
+    }
 }
 </script>
 
 <template>
 
     <div id="wrapper">
-        <h1>events</h1>
-        <input type="text" v-model="title" placeholder="Server title">
-        <input type="datetime-local" v-model="date" placeholder="Server title">
-        <textarea id="story" name="story" rows="5" cols="33" v-model="description"></textarea>
-        <button class="add_server" @click="addEvent">add event</button>
+        <h1>Advertisements</h1>
+        <input type="text" v-model="new_title" placeholder="advertisement banner title">
+        <input type="file" ref="fileInput" accept="image/png,image/jpeg" @change="onFilePicked"/>
+        <p>picture 5:1 ratio</p>
+        <button class="add_game" @click="addAdvertisement">add advertisement</button>
 
-        <div class="events-wrapper" v-for="i in this.events.data" :key="i">
-            <p class="title">{{i.title}} at {{i.date}}</p>
-            <p class="p-description">{{i.description}}</p>
-            <button class="remove_server" @click="deleteEvent(i.id)">remove event</button>
+        <div class="pub-wrapper" v-for="i in this.advertisements.data" :key="i">
+            <p class="title">{{i.title}}</p>
+            <p class="expired" v-if="isPast(i.expiration)">expired</p>
+            <button class="remove_game" @click="deleteAdvertisement(i.id)">remove advertisement</button>
         </div>
 
         <Teleport to="body">
@@ -145,7 +166,10 @@ export default{
 .v-leave-to {
   opacity: 0;
 }
-
+.expired{
+    background: #d9d9d9;
+    color: #F40552;
+}
 .modal{
     position: absolute;
     z-index: 3;
@@ -184,19 +208,19 @@ input{
     margin-right: 0.5em;
     
 }
-.events-wrapper{
+.pub-wrapper{
+    display: flex;
+    flex-direction: column;
     height: 100%;
     margin: auto;
-    text-align: center;
     border: solid 1px black;
 }
-
-.remove_server{
+.remove_game{
     margin: auto;
     background: #ff605c;
     border-radius: 5px;
 }
-.add_server{
+.add_game{
     background: #00ca4e;
     border-radius: 5px;
     margin: auto;
@@ -205,7 +229,7 @@ input{
 button:hover{
     color: #d9d9d9;
 }
-.p-description{
-    margin: 0;
+.title{
+    margin: auto;
 }
 </style>

@@ -3,6 +3,7 @@ import Header from '@/components/GenHeader.vue'
 import AddGames from '@/components/admin/AddGames.vue'
 import AddServers from '@/components/admin/AddServers.vue'
 import AddEvents from '@/components/admin/AddEvents.vue'
+import AddPub from '@/components/admin/AddPub.vue'
 
 export default{
   name: 'Admin',
@@ -16,6 +17,7 @@ export default{
   AddGames,
   AddServers,
   AddEvents,
+  AddPub,
   }
 }
 </script>
@@ -27,6 +29,7 @@ export default{
           <AddGames/>
           <AddServers/>
           <AddEvents/>
+          <AddPub/>
         </div>
         
     </div>

@@ -24,7 +24,7 @@ export default {
             }
         }
 
-        await axios.post('http://localhost:3000/api/advertisements_data', {}, data).then((result) => {
+        await axios.post('http://localhost:3000/api/advertisements-data', {}, data).then((result) => {
             if(result.data.length === 0) return
             this.array.splice(0, this.array.length, ...result.data)
         }).catch((err) => {
