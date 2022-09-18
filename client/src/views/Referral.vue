@@ -67,10 +67,11 @@ export default{
         country: this.country,
         how_found_us: this.viewMethod,
         balance: this.balance,
+        referral: window.location.href,
       }
 
     
-      await axios.post('http://localhost:3000/api/registration', body).then((res) => {
+      await axios.post('http://localhost:3000/api/referral', body).then((res) => {
         this.loading_message = ''
         this.error_message = ''
         if(res.status === 201) {

@@ -12,6 +12,7 @@ export default {
                 'Feel free to check out our games, servers and features.',
                 'Join us on Discord & Guilded!',
                 'Follow us on social media!',
+                'share your referral link to get 20 HGcoins',
                 ],
             get: 'BY GAMERS FOR GAMERS',
             index: 0,

@@ -49,6 +49,7 @@ export default{
         user_avatar: '',
         balance: 0,
         referral_link: '',
+        vip: false,
         users: [],
         games: [],
         advertisings: [],
@@ -82,7 +83,7 @@ export default{
     },
   },
   async created(){
-    
+
         socket.on('user_data', async (data) => {
             await this.getUserData() 
             this.users.splice(0, this.users.length, ...data)
@@ -93,6 +94,7 @@ export default{
             this.balance = context_user.balance
             this.referral_link = context_user.user_referral_link
             this.user_avatar = context_user.avatar
+            this.vip = context_user.vip
         })
         this.reloadPage()
   }
@@ -108,6 +110,7 @@ export default{
                         <img :src="user_avatar" alt="1080x1080 px">
                     </div>
                     <p id="username">{{username}}</p>
+                    <p id="vip" v-if="this.vip"><i class='bx bx-diamond'></i>VIP</p>
                     <p id="rank" :class="{}"><i class='bx bxs-star bx-sm'></i> {{rank}}</p>
                 </div>
             </div>
@@ -178,7 +181,11 @@ export default{
     margin-top: 0.5em;
 }
 
-
+#vip{
+    margin: auto;
+    color: #FFD700;
+    font-size: 0.8em;
+}
 
 #user-id-wrapper{
     padding: 1em;
@@ -205,8 +212,8 @@ export default{
 
 #username{
     text-align: center;
-    font-size: 17px;
-    margin-inline: 0;
+    font-size: 0.9em;
+    margin: auto;
     overflow: hidden;
 }
 
@@ -231,7 +238,7 @@ h1{
 
 #sidebar{
     width: 11em;
-    background-color: #1F2133;
+    background-color: #08090F;
     float: left;
     position: fixed;
     top: 0;

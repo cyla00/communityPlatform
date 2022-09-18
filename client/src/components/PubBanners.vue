@@ -8,8 +8,8 @@ export default {
         return{
             item1: '',
             item2: '',
-            background_1: 'https://i.ibb.co/944y7Pr/e.png',
-            background_2: 'https://i.ibb.co/944y7Pr/e.png',
+            background_1: '"https://i.ibb.co/p4BsNpt/awdawd-1.png',
+            background_2: '"https://i.ibb.co/p4BsNpt/awdawd-1.png',
             array: [],
             timer: null,
         }

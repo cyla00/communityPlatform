@@ -36,7 +36,7 @@ import add_event from './modules/add_event'
 import remove_event from './modules/remove_event'
 import add_advertisement from './modules/add_advertisement'
 import remove_advertisement from './modules/remove_advertisement'
-
+ 
 import { jwt_verification } from './modules/jwt_verification'
 
 import update_user_data from './modules/update_user_data'

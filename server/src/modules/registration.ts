@@ -134,7 +134,7 @@ router.post('/', (req:any,res:any) => {
                         user_games: [],
                         user_rank: 1,
                         user_token_balance: req.body.balance || 0,
-                        user_referral_link: `${process.env.WEBSITE_HOST}referral/${uuidv4()}`,
+                        user_referral_link: `${process.env.CLIENT_HOST}referral/${uuidv4()}`,
                         user_referral_count: [],
                         is_admin: false,
                         is_staff: false,

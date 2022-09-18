@@ -43,6 +43,7 @@ router.post('/', async (req:any,res:any) => {
                     discord: element.discord_username,
                     twitch: element.twitch_link,
                     youtube: element.youtube_link,
+                    vip: element.is_vip,
                 })
             })
             userData.splice(0, userData.length, ...array)

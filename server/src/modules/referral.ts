@@ -133,8 +133,8 @@ router.post('/', (req:any,res:any) => {
                         youtube_link: '',
                         user_games: [],
                         user_rank: 1,
-                        user_token_balance: req.body.balance || 0,
-                        user_referral_link: `${process.env.WEBSITE_HOST}referral/${uuidv4()}`,
+                        user_token_balance: 20,
+                        user_referral_link: `${process.env.CLIENT_HOST}referral/${uuidv4()}`,
                         user_referral_count: [],
                         is_admin: false,
                         is_staff: false,
@@ -217,13 +217,21 @@ router.post('/', (req:any,res:any) => {
                             `,
                             })
                         }
-                        mailer().then(() => {
-                            db.close()
-                            res.status(201).send({security_key: key})
+                        mailer().then(async () => {
+
+                            const myquery = {user_referral_link: req.body.referral}
+                            const newvalues = {$inc: {user_token_balance: 20}}
+                            await myDB.collection('users').updateOne (myquery, newvalues, {}).then((doc:any) => {
+                                db.close()
+                                res.status(201).send({security_key: key})
+                            }).catch((err:any) => {
+                                if(err) {
+                                    db.close()
+                                    return res.status(401).send({error: 'An error occurred, contact support for help'})
+                                }
+                            })
                         }).catch((err:any) => {
-                            if(err) {
-                                console.log(err);
-                                
+                            if(err) {        
                                 db.close()
                                 return res.status(401).send({error: 'An error occurred, contact support for help'})
                             }

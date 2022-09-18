@@ -22,7 +22,7 @@ export default{
 body{
   margin: 0;
   padding: 0;
-  background: #161923;
+  background: #0F121D;
 }
 #app {
   font-family: Poppins;

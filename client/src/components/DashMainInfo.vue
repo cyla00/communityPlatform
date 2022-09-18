@@ -39,7 +39,7 @@ export default {
         <div class="system-wrapper">
             <div class="text-wrapper">
                 <p class="title">Your referral link</p>
-                <button id="link-copy" @click="copy()"><i class='bx bx-copy-alt bx-sm'></i>copy link</button>
+                <button id="link-copy" @click="copy()"><i class='bx bx-copy-alt bx-sm'></i>click to copy & share link</button>
             </div>
         </div>
 
