@@ -32,9 +32,10 @@ router.post('/', (req:any,res:any) => {
         youtube_link: String,
         user_games: Array<String>,
         user_rank: Number,
+        user_xp: Number,
         user_token_balance: Number,
         user_referral_link: String,
-        user_referral_count: Array<Object>,
+        user_referral_count: Number,
         is_admin: Boolean,
         is_staff: Boolean,
         is_vip: Boolean,
@@ -133,9 +134,10 @@ router.post('/', (req:any,res:any) => {
                         youtube_link: '',
                         user_games: [],
                         user_rank: 1,
+                        user_xp: 0,
                         user_token_balance: 20,
                         user_referral_link: `${process.env.CLIENT_HOST}referral/${uuidv4()}`,
-                        user_referral_count: [],
+                        user_referral_count: 0,
                         is_admin: false,
                         is_staff: false,
                         is_vip: false,
@@ -220,7 +222,7 @@ router.post('/', (req:any,res:any) => {
                         mailer().then(async () => {
 
                             const myquery = {user_referral_link: req.body.referral}
-                            const newvalues = {$inc: {user_token_balance: 20}}
+                            const newvalues = {$inc: {user_token_balance: 20, user_referral_count: 1}}
                             await myDB.collection('users').updateOne (myquery, newvalues, {}).then((doc:any) => {
                                 db.close()
                                 res.status(201).send({security_key: key})

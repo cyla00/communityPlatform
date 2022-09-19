@@ -31,6 +31,7 @@ router.post('/', async (req:any,res:any) => {
                     email: element.email,
                     username: element.username,
                     user_rank: element.user_rank,
+                    user_xp: element.user_xp,
                     balance: element.user_token_balance,
                     avatar: element.avatar,
                     profile_banner: element.profile_banner,

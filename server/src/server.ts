@@ -36,6 +36,7 @@ import add_event from './modules/add_event'
 import remove_event from './modules/remove_event'
 import add_advertisement from './modules/add_advertisement'
 import remove_advertisement from './modules/remove_advertisement'
+import update_rank from './modules/update_rank'
  
 import { jwt_verification } from './modules/jwt_verification'
 
@@ -104,6 +105,7 @@ app.use('/api/update-events-data', jwt_verification, get_events)
 app.use('/api/remove-event', jwt_verification, remove_event)
 app.use('/api/add-advertisement', jwt_verification, add_advertisement)
 app.use('/api/remove-advertisement', jwt_verification, remove_advertisement)
+app.use('/api/update-rank', jwt_verification, update_rank)
 
 
 io.on('connection', (socket:any) => {

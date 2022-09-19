@@ -8,6 +8,7 @@ import DashMainInfo from '@/components/DashMainInfo.vue'
 import Games from '@/components/Games.vue'
 import Events from '@/components/Events.vue'
 import Servers from '@/components/Servers.vue'
+import calculateRank  from '@/views/calculateRank'
 
 import jwt_decode from "jwt-decode"
 const { io } = require("socket.io-client")
@@ -45,6 +46,7 @@ export default{
         authority: localStorage.getItem('authority'),
         user_id: localStorage.getItem('id'),
         username: '',
+        xp: 0,
         rank: 0,
         user_avatar: '',
         balance: 0,
@@ -83,20 +85,21 @@ export default{
     },
   },
   async created(){
-
-        socket.on('user_data', async (data) => {
-            await this.getUserData() 
+        await this.getUserData()
+        await socket.on('user_data', async (data) => {
+            
             this.users.splice(0, this.users.length, ...data)
 
             let context_user = this.users.find(element => element.id === localStorage.getItem('id'))
             this.username = context_user.username
             this.rank = context_user.user_rank
+            this.xp = context_user.user_xp
+            this.rank = calculateRank(this.xp, this.rank)
             this.balance = context_user.balance
             this.referral_link = context_user.user_referral_link
             this.user_avatar = context_user.avatar
             this.vip = context_user.vip
         })
-        this.reloadPage()
   }
 }
 </script>
